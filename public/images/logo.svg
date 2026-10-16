@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 50" fill="none">
+  <defs>
+    <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818CF8" />
+      <stop offset="50%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+  </defs>
+  <!-- Icon -->
+  <g transform="translate(2, 5) scale(0.8)">
+    <rect x="6" y="14" width="36" height="30" rx="9" fill="url(#logo-grad)"/>
+    <path d="M16 16V12C16 7.58172 19.5817 4 24 4C28.4183 4 32 7.58172 32 12V16" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M24 21L25.8 25.5L30.5 27L25.8 28.5L24 33L22.2 28.5L17.5 27L22.2 25.5L24 21Z" fill="white"/>
+  </g>
+  <!-- Text -->
+  <text x="52" y="32" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="24" font-weight="800" fill="currentColor" letter-spacing="-0.5">Nova<tspan fill="#6366F1">Cart</tspan></text>
+</svg>
