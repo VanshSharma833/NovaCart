@@ -18,7 +18,7 @@ export const MobileNav: React.FC = () => {
   ];
 
   return (
-    <nav aria-label="Mobile Bottom Navigation" className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 sm:hidden pb-safe">
+    <nav aria-label="Mobile Bottom Navigation" className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E7E5E4] sm:hidden pb-safe">
       <div className="grid grid-cols-5 h-16 items-center">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -28,15 +28,15 @@ export const MobileNav: React.FC = () => {
               to={item.to}
               className={({ isActive }) =>
                 cn(
-                  'flex flex-col items-center justify-center h-full text-[11px] font-semibold transition-colors relative',
-                  isActive ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'
+                  'flex flex-col items-center justify-center h-full text-[10px] font-medium transition-colors relative',
+                  isActive ? 'text-[#171717] font-bold' : 'text-[#737373] hover:text-[#171717]'
                 )
               }
             >
               <div className="relative">
                 <Icon className="w-5 h-5 mb-0.5" />
                 {item.badge !== undefined && item.badge > 0 && (
-                  <span className="absolute -top-1.5 -right-2 bg-indigo-600 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold">
+                  <span className="absolute -top-1.5 -right-2 bg-[#171717] text-white rounded-full text-[9px] w-4 h-4 flex items-center justify-center font-bold">
                     {item.badge}
                   </span>
                 )}

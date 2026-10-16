@@ -54,7 +54,7 @@ export const CuratedApparelSection: React.FC = () => {
 
           <Link
             to="/shop?category=fashion"
-            className="inline-flex items-center gap-2 text-sm font-bold text-slate-900 hover:text-indigo-600 group transition-colors self-start md:self-end"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[#171717] hover:text-[#6554D9] group transition-colors self-start md:self-end"
           >
             <span>Explore All 120+ Styles</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -129,7 +129,7 @@ export const CuratedApparelSection: React.FC = () => {
 
                     <Link
                       to={`/product/${item.id}`}
-                      className="text-sm font-bold text-slate-900 hover:text-indigo-600 line-clamp-1 transition-colors"
+                      className="text-sm font-medium text-[#171717] hover:text-[#6554D9] line-clamp-1 transition-colors"
                     >
                       {item.name}
                     </Link>

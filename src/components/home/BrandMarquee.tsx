@@ -1,30 +1,27 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Sparkles } from 'lucide-react';
 
 export const BrandMarquee: React.FC = () => {
   const brands = [
-    { name: 'NIKE LAB', label: 'Tier-0 Footwear' },
-    { name: 'APPLE', label: 'Flagship Tech' },
-    { name: 'SONY STUDIO', label: 'Hi-Res Audio' },
-    { name: 'ZARA ATELIER', label: 'Minimalist Tailoring' },
-    { name: "LEVI'S VINTAGE", label: 'Selvedge Denim' },
-    { name: 'ARC’TERYX', label: 'Technical Outerwear' },
-    { name: 'SAMSUNG ULTRA', label: 'Next-Gen Displays' },
-    { name: 'PRADA MILANO', label: 'Luxury Leather' },
-    { name: 'DYSON', label: 'Pioneering Hardware' },
-    { name: 'ACNE STUDIOS', label: 'Stockholm Design' },
-    { name: 'BYREDO', label: 'Artisanal Fragrance' },
+    { name: 'NIKE LAB', label: 'Tier-0' },
+    { name: 'APPLE', label: 'Flagship' },
+    { name: 'SONY STUDIO', label: 'Audio' },
+    { name: 'ZARA ATELIER', label: 'Tailoring' },
+    { name: "LEVI'S VINTAGE", label: 'Denim' },
+    { name: 'ARC’TERYX', label: 'Outerwear' },
+    { name: 'PRADA MILANO', label: 'Leather' },
+    { name: 'DYSON', label: 'Engineering' },
+    { name: 'ACNE STUDIOS', label: 'Design' },
+    { name: 'BYREDO', label: 'Fragrance' },
   ];
 
-  // Duplicate for seamless infinite loop
   const marqueeItems = [...brands, ...brands, ...brands];
 
   return (
-    <div className="relative py-7 bg-[#0A0D14] border-y border-white/[0.08] overflow-hidden select-none">
-      {/* Left & Right Frosted Glass Fade Gradients */}
-      <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-36 bg-gradient-to-r from-[#0A0D14] via-[#0A0D14]/80 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-36 bg-gradient-to-l from-[#0A0D14] via-[#0A0D14]/80 to-transparent z-10 pointer-events-none" />
+    <div className="relative py-4 bg-white border-b border-[#E7E5E4] overflow-hidden select-none">
+      {/* Side Fade Gradients */}
+      <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
       {/* Infinite Horizontal Sliding Marquee Track */}
       <motion.div
@@ -41,15 +38,15 @@ export const BrandMarquee: React.FC = () => {
         {marqueeItems.map((brand, idx) => (
           <div
             key={idx}
-            className="flex items-center gap-3 group cursor-default"
+            className="flex items-center gap-2 group cursor-default"
           >
-            <span className="text-sm sm:text-base font-black tracking-widest text-slate-400 group-hover:text-white transition-colors uppercase font-mono">
+            <span className="text-xs sm:text-sm font-bold tracking-widest text-[#737373] group-hover:text-[#171717] transition-colors uppercase">
               {brand.name}
             </span>
-            <span className="hidden sm:inline text-[10px] uppercase tracking-wider text-slate-500 group-hover:text-cyan-400 font-semibold transition-colors">
-              • {brand.label}
+            <span className="text-[10px] text-[#A8A29E] font-medium hidden sm:inline">
+              ({brand.label})
             </span>
-            <span className="text-slate-700 ml-4">•</span>
+            <span className="text-[#E7E5E4] ml-6">•</span>
           </div>
         ))}
       </motion.div>

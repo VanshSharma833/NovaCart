@@ -5,19 +5,13 @@ import {
   User,
   MapPin,
   Heart,
-  Settings,
-  Clock,
-  CheckCircle2,
-  ChevronRight,
-  ExternalLink,
-  Shield,
   CreditCard,
   LogOut,
+  Shield,
 } from 'lucide-react';
 import { formatPrice } from '../../lib/formatPrice';
 import { useWishlist } from '../../context/WishlistContext';
 import { Button } from '../../components/ui/Button';
-import { Badge } from '../../components/ui/Badge';
 
 export const AccountPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'orders' | 'profile' | 'addresses' | 'payments'>('orders');
@@ -83,35 +77,34 @@ export const AccountPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-20 pt-8">
+    <div className="min-h-screen bg-[#FAF9F6] pb-20 pt-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* User Greeting Banner */}
-        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-subtle p-6 sm:p-8 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="bg-white rounded-2xl border border-[#E7E5E4] p-6 sm:p-8 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-0.5 shadow-md">
-              <div className="w-full h-full rounded-2xl bg-white flex items-center justify-center text-indigo-600 font-black text-xl">
-                VS
-              </div>
+            <div className="w-14 h-14 rounded-full bg-[#FAF9F6] border border-[#E7E5E4] flex items-center justify-center text-[#171717] font-semibold text-lg tracking-wider">
+              VS
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-black text-slate-900">Vansh Sharma</h1>
-                <Badge variant="brand" size="sm">
-                  VIP Club
-                </Badge>
+                <h1 className="text-xl sm:text-2xl font-medium text-[#171717] tracking-tight">Vansh Sharma</h1>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FAF9F6] border border-[#E7E5E4] text-[10px] font-medium text-[#171717]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#6554D9]" />
+                  Member
+                </span>
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">vansh.sharma@example.com • +91 98765 43210</p>
+              <p className="text-xs text-[#737373] mt-0.5">vansh.sharma@example.com • +91 98765 43210</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <Link to="/wishlist">
-              <Button variant="outline" size="sm" leftIcon={<Heart className="w-3.5 h-3.5 text-rose-500" />}>
+              <Button variant="outline" size="sm" leftIcon={<Heart className="w-3.5 h-3.5" />}>
                 Wishlist ({wishlistCount})
               </Button>
             </Link>
             <Button variant="secondary" size="sm" leftIcon={<LogOut className="w-3.5 h-3.5" />}>
-              Demo Logout
+              Sign Out
             </Button>
           </div>
         </div>
@@ -119,22 +112,22 @@ export const AccountPage: React.FC = () => {
         {/* Dashboard Tabs & Content */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Navigation Sidebar */}
-          <aside className="lg:col-span-3 bg-white rounded-2xl border border-slate-200/80 shadow-subtle p-3 space-y-1">
+          <aside className="lg:col-span-3 bg-white rounded-2xl border border-[#E7E5E4] p-3 space-y-1">
             <button
               onClick={() => setActiveTab('orders')}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
                 activeTab === 'orders'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-700 hover:bg-slate-50'
+                  ? 'bg-[#171717] text-white'
+                  : 'text-[#171717] hover:bg-[#FAF9F6]'
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <Package className="w-4 h-4" />
-                <span>Orders & Tracking</span>
+                <Package className="w-4 h-4 stroke-1" />
+                <span>Orders</span>
               </div>
               <span
                 className={`text-[10px] px-2 py-0.5 rounded-full ${
-                  activeTab === 'orders' ? 'bg-indigo-700 text-white' : 'bg-slate-100 text-slate-600'
+                  activeTab === 'orders' ? 'bg-white/20 text-white' : 'bg-[#FAF9F6] text-[#737373] border border-[#E7E5E4]'
                 }`}
               >
                 {demoOrders.length}
@@ -143,50 +136,50 @@ export const AccountPage: React.FC = () => {
 
             <button
               onClick={() => setActiveTab('profile')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
                 activeTab === 'profile'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-700 hover:bg-slate-50'
+                  ? 'bg-[#171717] text-white'
+                  : 'text-[#171717] hover:bg-[#FAF9F6]'
               }`}
             >
-              <User className="w-4 h-4" />
+              <User className="w-4 h-4 stroke-1" />
               <span>Personal Profile</span>
             </button>
 
             <button
               onClick={() => setActiveTab('addresses')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
                 activeTab === 'addresses'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-700 hover:bg-slate-50'
+                  ? 'bg-[#171717] text-white'
+                  : 'text-[#171717] hover:bg-[#FAF9F6]'
               }`}
             >
-              <MapPin className="w-4 h-4" />
+              <MapPin className="w-4 h-4 stroke-1" />
               <span>Saved Addresses</span>
             </button>
 
             <button
               onClick={() => setActiveTab('payments')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
                 activeTab === 'payments'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-700 hover:bg-slate-50'
+                  ? 'bg-[#171717] text-white'
+                  : 'text-[#171717] hover:bg-[#FAF9F6]'
               }`}
             >
-              <CreditCard className="w-4 h-4" />
-              <span>Saved Payment Methods</span>
+              <CreditCard className="w-4 h-4 stroke-1" />
+              <span>Payment Methods</span>
             </button>
           </aside>
 
           {/* Main Tab Panels */}
-          <main className="lg:col-span-9 bg-white rounded-3xl border border-slate-200/80 shadow-subtle p-6 sm:p-8">
+          <main className="lg:col-span-9 bg-white rounded-2xl border border-[#E7E5E4] p-6 sm:p-8">
             {/* Orders Tab */}
             {activeTab === 'orders' && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">Your Orders</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Track shipments, download invoices, and initiate 7-day exchanges
+                  <h2 className="text-base font-semibold text-[#171717]">Order History</h2>
+                  <p className="text-xs text-[#737373] mt-0.5">
+                    Track shipments, view details, and manage past orders
                   </p>
                 </div>
 
@@ -194,22 +187,22 @@ export const AccountPage: React.FC = () => {
                   {demoOrders.map((order) => (
                     <div
                       key={order.id}
-                      className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition-colors space-y-4"
+                      className="border border-[#E7E5E4] rounded-xl p-5 hover:border-[#171717]/30 transition-colors space-y-4"
                     >
                       {/* Order top bar */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 text-xs">
+                      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#E7E5E4] text-xs">
                         <div className="flex items-center gap-3">
-                          <span className="font-extrabold text-slate-900">#{order.id}</span>
-                          <span className="text-slate-400">•</span>
-                          <span className="text-slate-500">{order.date}</span>
+                          <span className="font-semibold text-[#171717]">#{order.id}</span>
+                          <span className="text-[#E7E5E4]">•</span>
+                          <span className="text-[#737373]">{order.date}</span>
                         </div>
 
                         <div className="flex items-center gap-2">
                           <span
-                            className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
+                            className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
                               order.status === 'Delivered'
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : 'bg-indigo-100 text-indigo-800'
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                : 'bg-[#FAF9F6] text-[#171717] border-[#E7E5E4]'
                             }`}
                           >
                             {order.status}
@@ -221,16 +214,16 @@ export const AccountPage: React.FC = () => {
                       <div className="space-y-3">
                         {order.items.map((item, idx) => (
                           <div key={idx} className="flex items-center gap-3.5">
-                            <div className="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 p-1 shrink-0 overflow-hidden flex items-center justify-center">
+                            <div className="w-14 h-14 rounded-lg bg-[#FAF9F6] border border-[#E7E5E4] p-1 shrink-0 overflow-hidden flex items-center justify-center">
                               <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-xs font-bold text-slate-900 truncate">{item.name}</h4>
-                              <p className="text-[11px] text-slate-500">
+                              <h4 className="text-xs font-medium text-[#171717] truncate">{item.name}</h4>
+                              <p className="text-[11px] text-[#737373]">
                                 {item.color} {item.size ? `• Size: ${item.size}` : ''}
                               </p>
                             </div>
-                            <span className="text-xs font-bold text-slate-900">
+                            <span className="text-xs font-semibold text-[#171717]">
                               {formatPrice(item.price)}
                             </span>
                           </div>
@@ -238,10 +231,10 @@ export const AccountPage: React.FC = () => {
                       </div>
 
                       {/* Bottom row */}
-                      <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
-                        <div className="text-slate-500">
+                      <div className="pt-3 border-t border-[#E7E5E4] flex flex-wrap items-center justify-between gap-3 text-xs">
+                        <div className="text-[#737373]">
                           Total:{' '}
-                          <span className="font-extrabold text-slate-900 text-sm">
+                          <span className="font-semibold text-[#171717] text-sm">
                             {formatPrice(order.total)}
                           </span>
                         </div>
@@ -265,33 +258,33 @@ export const AccountPage: React.FC = () => {
             {activeTab === 'profile' && (
               <div className="space-y-6 max-w-xl">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">Personal Information</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">Manage your personal profile and preferences</p>
+                  <h2 className="text-base font-semibold text-[#171717]">Personal Information</h2>
+                  <p className="text-xs text-[#737373] mt-0.5">Manage your personal profile and account credentials</p>
                 </div>
 
                 <div className="space-y-4 text-xs">
                   <div>
-                    <label className="font-bold text-slate-700 block mb-1">Full Legal Name</label>
+                    <label className="font-medium text-[#171717] block mb-1">Full Name</label>
                     <input
                       type="text"
                       defaultValue="Vansh Sharma"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800"
+                      className="w-full bg-[#FAF9F6] border border-[#E7E5E4] rounded-lg px-3.5 py-2.5 text-[#171717] focus:outline-none focus:border-[#171717]"
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-slate-700 block mb-1">Email Address</label>
+                    <label className="font-medium text-[#171717] block mb-1">Email Address</label>
                     <input
                       type="email"
                       defaultValue="vansh.sharma@example.com"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800"
+                      className="w-full bg-[#FAF9F6] border border-[#E7E5E4] rounded-lg px-3.5 py-2.5 text-[#171717] focus:outline-none focus:border-[#171717]"
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-slate-700 block mb-1">Phone Number</label>
+                    <label className="font-medium text-[#171717] block mb-1">Phone Number</label>
                     <input
                       type="tel"
                       defaultValue="+91 98765 43210"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800"
+                      className="w-full bg-[#FAF9F6] border border-[#E7E5E4] rounded-lg px-3.5 py-2.5 text-[#171717] focus:outline-none focus:border-[#171717]"
                     />
                   </div>
                 </div>
@@ -307,8 +300,8 @@ export const AccountPage: React.FC = () => {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-lg font-bold text-slate-900">Saved Addresses</h2>
-                    <p className="text-xs text-slate-500 mt-0.5">Where your orders get delivered</p>
+                    <h2 className="text-base font-semibold text-[#171717]">Saved Addresses</h2>
+                    <p className="text-xs text-[#737373] mt-0.5">Addresses for delivery and billing</p>
                   </div>
                   <Button variant="primary" size="sm">
                     + Add New Address
@@ -316,23 +309,23 @@ export const AccountPage: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                  <div className="border-2 border-indigo-600 rounded-2xl p-4 bg-indigo-50/20 relative space-y-1">
-                    <span className="absolute top-3 right-3 text-[10px] font-bold bg-indigo-600 text-white px-2 py-0.5 rounded-full">
+                  <div className="border border-[#171717] rounded-xl p-4 bg-[#FAF9F6] relative space-y-1">
+                    <span className="absolute top-3 right-3 text-[10px] font-medium bg-[#171717] text-white px-2 py-0.5 rounded-full">
                       Default
                     </span>
-                    <h4 className="font-bold text-slate-900">Home</h4>
-                    <p className="text-slate-600 font-medium">Vansh Sharma</p>
-                    <p className="text-slate-500">123 Green Park, Hauz Khas</p>
-                    <p className="text-slate-500">New Delhi - 110016, Delhi</p>
-                    <p className="text-slate-500 pt-1">Phone: +91 98765 43210</p>
+                    <h4 className="font-semibold text-[#171717]">Home</h4>
+                    <p className="text-[#171717] font-medium">Vansh Sharma</p>
+                    <p className="text-[#737373]">123 Green Park, Hauz Khas</p>
+                    <p className="text-[#737373]">New Delhi - 110016, Delhi</p>
+                    <p className="text-[#737373] pt-1">Phone: +91 98765 43210</p>
                   </div>
 
-                  <div className="border border-slate-200 rounded-2xl p-4 bg-white space-y-1">
-                    <h4 className="font-bold text-slate-900">Office</h4>
-                    <p className="text-slate-600 font-medium">Vansh Sharma</p>
-                    <p className="text-slate-500">Tower B, 4th Floor, Cyber Hub</p>
-                    <p className="text-slate-500">Gurugram - 122002, Haryana</p>
-                    <p className="text-slate-500 pt-1">Phone: +91 98765 43210</p>
+                  <div className="border border-[#E7E5E4] rounded-xl p-4 bg-white space-y-1">
+                    <h4 className="font-semibold text-[#171717]">Office</h4>
+                    <p className="text-[#171717] font-medium">Vansh Sharma</p>
+                    <p className="text-[#737373]">Tower B, 4th Floor, Cyber Hub</p>
+                    <p className="text-[#737373]">Gurugram - 122002, Haryana</p>
+                    <p className="text-[#737373] pt-1">Phone: +91 98765 43210</p>
                   </div>
                 </div>
               </div>
@@ -342,34 +335,34 @@ export const AccountPage: React.FC = () => {
             {activeTab === 'payments' && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">Payment Methods</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">Saved cards and linked UPI handles</p>
+                  <h2 className="text-base font-semibold text-[#171717]">Payment Methods</h2>
+                  <p className="text-xs text-[#737373] mt-0.5">Saved cards and linked payment accounts</p>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
+                  <div className="p-4 rounded-xl border border-[#E7E5E4] flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
-                        <CreditCard className="w-5 h-5" />
+                      <div className="p-2 rounded-lg bg-[#FAF9F6] border border-[#E7E5E4] text-[#171717]">
+                        <CreditCard className="w-5 h-5 stroke-1" />
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-slate-900">HDFC Regalia Visa Platinum</h4>
-                        <p className="text-[11px] text-slate-400">•••• •••• •••• 4821 • Expires 08/29</p>
+                        <h4 className="text-xs font-semibold text-[#171717]">HDFC Regalia Visa Platinum</h4>
+                        <p className="text-[11px] text-[#737373]">•••• •••• •••• 4821 • Expires 08/29</p>
                       </div>
                     </div>
-                    <span className="text-[10px] font-bold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-medium bg-[#FAF9F6] border border-[#E7E5E4] text-[#171717] px-2 py-0.5 rounded-full">
                       Primary
                     </span>
                   </div>
 
-                  <div className="p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
+                  <div className="p-4 rounded-xl border border-[#E7E5E4] flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600">
-                        <Shield className="w-5 h-5" />
+                      <div className="p-2 rounded-lg bg-[#FAF9F6] border border-[#E7E5E4] text-[#171717]">
+                        <Shield className="w-5 h-5 stroke-1" />
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-slate-900">Google Pay (UPI)</h4>
-                        <p className="text-[11px] text-slate-400">vansh@okaxis • Verified</p>
+                        <h4 className="text-xs font-semibold text-[#171717]">UPI Handle</h4>
+                        <p className="text-[11px] text-[#737373]">vansh@okaxis • Verified</p>
                       </div>
                     </div>
                   </div>

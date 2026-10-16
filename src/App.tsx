@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { ToastProvider } from './context/ToastContext';
@@ -30,34 +29,23 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-indigo-500 selection:text-white relative">
+    <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#171717] selection:bg-[#171717] selection:text-white relative">
       <AnnouncementBar onOpenContact={handleOpenContact} />
       <Navbar onOpenContact={handleOpenContact} />
 
-      {/* Main Content Route Views with Smooth Page Animations */}
-      <div className="flex-1 relative overflow-hidden">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.main
-            key={location.pathname}
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -14 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full h-full"
-          >
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<HomePage onOpenContact={handleOpenContact} />} />
-              <Route path="/shop" element={<ShopPage />} />
-              <Route path="/product/:id" element={<ProductDetailsPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/wishlist" element={<WishlistPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/account" element={<AccountPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </motion.main>
-        </AnimatePresence>
-      </div>
+      {/* Main Content Route Views */}
+      <main className="flex-1 w-full" key={location.pathname}>
+        <Routes>
+          <Route path="/" element={<HomePage onOpenContact={handleOpenContact} />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/product/:id" element={<ProductDetailsPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </main>
 
       <Footer onOpenContact={handleOpenContact} />
       <MobileNav />

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
 import {
   Search,
   Heart,
@@ -9,7 +8,6 @@ import {
   Menu,
   X,
   ChevronDown,
-  Sparkles,
   Mail,
   ArrowRight,
 } from 'lucide-react';
@@ -17,7 +15,6 @@ import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { categories } from '../../data/categories';
 import { cn } from '../../lib/helpers';
-import { AnimatedLogo } from '../ui/AnimatedLogo';
 
 interface NavbarProps {
   onOpenContact?: () => void;
@@ -55,36 +52,50 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 w-full transition-all duration-300',
-        isScrolled
-          ? 'bg-white/95 backdrop-blur-xl shadow-xs border-b border-slate-200/80 text-slate-900'
-          : 'bg-white/90 backdrop-blur-md border-b border-slate-100 text-slate-900'
+        'sticky top-0 z-40 w-full transition-colors duration-200 bg-white border-b border-[#E7E5E4]',
+        isScrolled ? 'shadow-xs' : ''
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-18 gap-3 sm:gap-6">
-          {/* LEFT: Mobile Menu Button & Kinetic Animated Logo */}
-          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-4 sm:gap-8">
+          {/* LEFT: Mobile Menu Button & Minimalist Brand Logo */}
+          <div className="flex items-center gap-3 sm:gap-6 shrink-0">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 -ml-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 lg:hidden focus:outline-none transition-colors"
+              className="p-2 -ml-2 text-[#171717] hover:text-black lg:hidden focus:outline-none"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
 
-            <AnimatedLogo size="md" />
+            {/* Editorial Minimal Logo */}
+            <Link to="/" className="flex items-center gap-1.5 group select-none">
+              <span className="text-xl sm:text-2xl font-black tracking-tight text-[#171717]">
+                NovaCart
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#6554D9] inline-block" />
+            </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-600 ml-4">
+            <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-[#737373] ml-2">
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  cn(
+                    'transition-colors hover:text-[#171717]',
+                    isActive ? 'text-[#171717] font-semibold' : ''
+                  )
+                }
+              >
+                Home
+              </NavLink>
+
               <NavLink
                 to="/shop"
                 className={({ isActive }) =>
                   cn(
-                    'transition-colors hover:text-slate-900 py-1 border-b-2',
-                    isActive
-                      ? 'text-slate-950 border-slate-950 font-bold'
-                      : 'border-transparent text-slate-600'
+                    'transition-colors hover:text-[#171717]',
+                    isActive ? 'text-[#171717] font-semibold' : ''
                   )
                 }
               >
@@ -93,79 +104,78 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
 
               {/* Categories Dropdown */}
               <div
-                className="relative py-1"
+                className="relative py-2"
                 onMouseEnter={() => setCategoriesOpen(true)}
                 onMouseLeave={() => setCategoriesOpen(false)}
               >
                 <button
-                  className="flex items-center gap-1 hover:text-slate-950 focus:outline-none transition-colors"
+                  className="flex items-center gap-1 hover:text-[#171717] focus:outline-none transition-colors"
                   onClick={() => setCategoriesOpen(!categoriesOpen)}
                   aria-expanded={categoriesOpen}
                 >
                   <span>Categories</span>
                   <ChevronDown
                     className={cn(
-                      'w-3.5 h-3.5 opacity-70 transition-transform duration-200',
-                      categoriesOpen ? 'rotate-180 text-slate-950' : ''
+                      'w-3.5 h-3.5 opacity-60 transition-transform duration-150',
+                      categoriesOpen ? 'rotate-180 text-[#171717]' : ''
                     )}
                   />
                 </button>
 
-                <AnimatePresence>
-                  {categoriesOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute top-full -left-2 w-72 bg-white/95 backdrop-blur-2xl rounded-2xl shadow-xl border border-slate-200/80 p-2.5 z-50"
-                    >
-                      <div className="flex items-center justify-between px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 mb-1">
-                        <span>Departments</span>
+                {categoriesOpen && (
+                  <div className="absolute top-full -left-2 w-72 bg-white rounded-xl shadow-lg border border-[#E7E5E4] p-3 z-50">
+                    <div className="flex items-center justify-between px-3 py-1.5 text-[11px] font-semibold text-[#737373] uppercase tracking-wider border-b border-[#E7E5E4] mb-1.5">
+                      <span>Departments</span>
+                      <Link
+                        to="/shop"
+                        onClick={() => setCategoriesOpen(false)}
+                        className="text-[#6554D9] hover:underline lowercase font-normal"
+                      >
+                        view all
+                      </Link>
+                    </div>
+                    <div className="space-y-0.5">
+                      {categories.map((cat) => (
                         <Link
-                          to="/shop"
+                          key={cat.id}
+                          to={`/shop?category=${cat.slug}`}
                           onClick={() => setCategoriesOpen(false)}
-                          className="text-slate-900 hover:underline lowercase font-normal"
+                          className="flex items-center justify-between px-3 py-2 text-xs font-medium text-[#171717] hover:bg-[#FAF9F6] rounded-lg transition-colors group"
                         >
-                          view all
+                          <span className="group-hover:translate-x-0.5 transition-transform">
+                            {cat.name}
+                          </span>
+                          <span className="text-[10px] text-[#737373] bg-[#FAF9F6] border border-[#E7E5E4] px-2 py-0.5 rounded-full">
+                            {cat.itemCount}
+                          </span>
                         </Link>
-                      </div>
-                      <div className="space-y-0.5">
-                        {categories.map((cat) => (
-                          <Link
-                            key={cat.id}
-                            to={`/shop?category=${cat.slug}`}
-                            onClick={() => setCategoriesOpen(false)}
-                            className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-700 hover:text-slate-950 hover:bg-slate-100/80 rounded-xl transition-colors group"
-                          >
-                            <span className="group-hover:translate-x-0.5 transition-transform">
-                              {cat.name}
-                            </span>
-                            <span className="text-[10px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full font-mono">
-                              {cat.itemCount}
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <NavLink
                 to="/shop?deals=true"
-                className="flex items-center gap-1.5 text-amber-600 hover:text-amber-700 font-semibold transition-colors"
+                className={({ isActive }) =>
+                  cn(
+                    'transition-colors hover:text-[#171717] flex items-center gap-1.5',
+                    isActive ? 'text-[#171717] font-semibold' : ''
+                  )
+                }
               >
-                <Sparkles className="w-3.5 h-3.5" />
                 <span>Deals</span>
+                <span className="text-[9px] font-bold uppercase tracking-wider bg-[#FAF9F6] text-[#6554D9] border border-[#E7E5E4] px-1.5 py-0.5 rounded">
+                  Sale
+                </span>
               </NavLink>
             </nav>
           </div>
 
-          {/* CENTER: Clean Expandable Search Bar */}
-          <div className="flex-1 max-w-md hidden md:flex justify-center">
+          {/* CENTER: Clean Minimalist Search Bar */}
+          <div className="flex-1 max-w-sm hidden md:flex justify-center">
             <form onSubmit={handleSearchSubmit} className="relative w-full">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#737373] pointer-events-none" />
               <input
                 ref={searchInputRef}
                 type="text"
@@ -173,19 +183,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search styles, tech, sneakers..."
+                placeholder="Search products, brands, essentials..."
                 className={cn(
-                  'w-full text-slate-900 placeholder:text-slate-400 text-xs sm:text-sm pl-9 pr-10 py-2 rounded-full border transition-all duration-200 outline-none',
+                  'w-full text-[#171717] placeholder:text-[#737373] text-xs sm:text-sm pl-9 pr-8 py-2 rounded-lg border transition-colors outline-none',
                   searchFocused
-                    ? 'bg-white border-slate-900 shadow-md ring-4 ring-slate-900/5'
-                    : 'bg-slate-100/90 hover:bg-slate-100 border-slate-200/70'
+                    ? 'bg-white border-[#171717]'
+                    : 'bg-[#FAF9F6] hover:bg-white border-[#E7E5E4]'
                 )}
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737373] hover:text-[#171717] p-0.5"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -193,71 +203,57 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
             </form>
           </div>
 
-          {/* RIGHT: Direct Mail, Wishlist, Cart & Profile with Micro-Animations */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            {/* Direct Mail Button */}
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
+          {/* RIGHT: Direct Mail, Wishlist, Cart & Profile */}
+          <div className="flex items-center gap-1 sm:gap-3 shrink-0">
+            {/* Direct Mail button */}
+            <button
               type="button"
               onClick={onOpenContact}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-semibold text-slate-800 bg-slate-100 hover:bg-slate-200/80 border border-slate-200/70 transition-colors shadow-2xs"
+              className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[#171717] hover:bg-[#FAF9F6] border border-[#E7E5E4] transition-colors"
               title="Direct Mail Support"
             >
-              <Mail className="w-3.5 h-3.5 text-slate-600" />
-              <span className="hidden xl:inline">Direct Mail</span>
-            </motion.button>
+              <Mail className="w-3.5 h-3.5 text-[#737373]" />
+              <span>Contact</span>
+            </button>
 
-            {/* Wishlist Button with Elastic Hover */}
-            <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }}>
-              <Link
-                to="/wishlist"
-                className="relative p-2.5 rounded-full text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors block"
-                title="Saved Items"
-                aria-label="Wishlist"
-              >
-                <Heart className="w-5 h-5" />
-                {wishlistCount > 0 && (
-                  <motion.span
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute top-1 right-1 w-4 h-4 rounded-full bg-slate-900 text-white text-[10px] font-extrabold flex items-center justify-center shadow-xs"
-                  >
-                    {wishlistCount}
-                  </motion.span>
-                )}
-              </Link>
-            </motion.div>
+            {/* Wishlist Button */}
+            <Link
+              to="/wishlist"
+              className="relative p-2 rounded-lg text-[#171717] hover:bg-[#FAF9F6] transition-colors"
+              title="Saved Items"
+              aria-label="Wishlist"
+            >
+              <Heart className="w-5 h-5 text-[#171717]" />
+              {wishlistCount > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#171717] text-white text-[9px] font-bold flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
 
-            {/* Cart Button with Animated Bounce */}
-            <motion.button
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.92 }}
+            {/* Cart Button */}
+            <button
               onClick={() => setIsCartOpen(true)}
-              className="relative p-2.5 rounded-full text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+              className="relative p-2 rounded-lg text-[#171717] hover:bg-[#FAF9F6] transition-colors"
               title="Shopping Cart"
               aria-label="Cart"
             >
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingBag className="w-5 h-5 text-[#171717]" />
               {totalItemCount > 0 && (
-                <motion.span
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute top-1 right-1 min-w-[1.1rem] h-[1.1rem] px-1 rounded-full bg-slate-900 text-white text-[10px] font-extrabold flex items-center justify-center shadow-xs"
-                >
+                <span className="absolute top-1 right-1 min-w-[1rem] h-4 px-1 rounded-full bg-[#171717] text-white text-[9px] font-bold flex items-center justify-center">
                   {totalItemCount}
-                </motion.span>
+                </span>
               )}
-            </motion.button>
+            </button>
 
             {/* Account Profile Link */}
             <Link
               to="/account"
-              className="p-2.5 rounded-full text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors hidden sm:flex"
+              className="p-2 rounded-lg text-[#171717] hover:bg-[#FAF9F6] transition-colors hidden sm:flex"
               title="My Account"
               aria-label="Account"
             >
-              <User className="w-5 h-5" />
+              <User className="w-5 h-5 text-[#171717]" />
             </Link>
           </div>
         </div>
@@ -265,117 +261,87 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
         {/* Mobile Search Bar */}
         <div className="md:hidden pb-3 pt-1">
           <form onSubmit={handleSearchSubmit} className="relative w-full">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#737373] pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search clothes, shoes, electronics..."
-              className="w-full bg-slate-100 text-slate-900 placeholder:text-slate-400 text-xs pl-9 pr-4 py-2 rounded-full border border-slate-200/60 focus:border-slate-800 outline-none"
+              placeholder="Search products..."
+              className="w-full bg-[#FAF9F6] text-[#171717] placeholder:text-[#737373] text-xs pl-9 pr-4 py-2 rounded-lg border border-[#E7E5E4] focus:border-[#171717] outline-none"
             />
           </form>
         </div>
       </div>
 
       {/* Mobile Navigation Drawer */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl px-4 pt-4 pb-6 space-y-4 shadow-xl overflow-hidden"
-          >
-            {/* Direct Mail Alert Banner in Mobile Menu */}
-            <div className="bg-slate-900 text-white rounded-2xl p-3.5 border border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-white/10 text-cyan-400 flex items-center justify-center">
-                  <Mail className="w-4 h-4" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-white">Direct Concierge Mail</p>
-                  <p className="text-[11px] text-slate-400">support@novacart.com</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenContact?.();
-                }}
-                className="text-xs font-bold text-slate-900 px-3 py-1.5 rounded-lg bg-white shadow-xs hover:bg-slate-100 transition-colors"
-              >
-                Reach Us
-              </button>
-            </div>
+      {mobileMenuOpen && (
+        <div className="lg:hidden border-t border-[#E7E5E4] bg-white px-4 pt-4 pb-6 space-y-4 shadow-sm">
+          <div className="flex flex-col space-y-1 text-sm font-medium text-[#171717]">
+            <Link
+              to="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-2 rounded-lg hover:bg-[#FAF9F6] text-[#171717]"
+            >
+              Home
+            </Link>
+            <Link
+              to="/shop"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-2 rounded-lg hover:bg-[#FAF9F6] text-[#171717] flex items-center justify-between"
+            >
+              <span>Shop All</span>
+              <ArrowRight className="w-4 h-4 text-[#737373]" />
+            </Link>
+            <Link
+              to="/shop?deals=true"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-2 rounded-lg hover:bg-[#FAF9F6] text-[#171717] flex items-center justify-between"
+            >
+              <span>Deals</span>
+              <span className="text-[10px] bg-[#FAF9F6] text-[#6554D9] border border-[#E7E5E4] px-2 py-0.5 rounded font-bold">
+                Sale
+              </span>
+            </Link>
+            <Link
+              to="/wishlist"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-2 rounded-lg hover:bg-[#FAF9F6] text-[#171717] flex items-center justify-between"
+            >
+              <span>Wishlist</span>
+              {wishlistCount > 0 && (
+                <span className="text-xs bg-[#171717] text-white px-2 py-0.5 rounded-full font-bold">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
+            <Link
+              to="/account"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-2 rounded-lg hover:bg-[#FAF9F6] text-[#171717]"
+            >
+              My Account & Orders
+            </Link>
+          </div>
 
-            <div className="flex flex-col space-y-1 text-sm font-semibold text-slate-800">
-              <Link
-                to="/"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-xl hover:bg-slate-100 text-slate-900 flex items-center justify-between"
-              >
-                <span>Home</span>
-              </Link>
-              <Link
-                to="/shop"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-xl hover:bg-slate-100 text-slate-900 flex items-center justify-between"
-              >
-                <span>Shop All Products</span>
-                <ArrowRight className="w-4 h-4 text-slate-400" />
-              </Link>
-              <Link
-                to="/shop?deals=true"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-xl hover:bg-amber-50 text-amber-700 flex items-center gap-2"
-              >
-                <Sparkles className="w-4 h-4 text-amber-500" />
-                <span>Deals & Flash Sales</span>
-              </Link>
-              <Link
-                to="/wishlist"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-xl hover:bg-slate-100 text-slate-900 flex items-center justify-between"
-              >
-                <span>Saved Wishlist</span>
-                {wishlistCount > 0 && (
-                  <span className="text-xs bg-slate-900 text-white px-2 py-0.5 rounded-full font-bold">
-                    {wishlistCount}
-                  </span>
-                )}
-              </Link>
-              <Link
-                to="/account"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-xl hover:bg-slate-100 text-slate-900"
-              >
-                My Account & Orders
-              </Link>
+          <div className="pt-3 border-t border-[#E7E5E4]">
+            <p className="text-[11px] font-semibold text-[#737373] uppercase tracking-wider px-1 mb-2.5">
+              Categories
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {categories.map((c) => (
+                <Link
+                  key={c.id}
+                  to={`/shop?category=${c.slug}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 text-xs font-medium text-[#171717] rounded-lg bg-[#FAF9F6] border border-[#E7E5E4] hover:bg-white"
+                >
+                  {c.name}
+                </Link>
+              ))}
             </div>
-
-            {/* Quick Department Chips */}
-            <div className="pt-3 border-t border-slate-100">
-              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1 mb-2.5">
-                Popular Categories
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {categories.map((c) => (
-                  <Link
-                    key={c.id}
-                    to={`/shop?category=${c.slug}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="px-3 py-2 text-xs font-medium text-slate-700 hover:text-slate-950 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-100 transition-colors"
-                  >
-                    {c.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

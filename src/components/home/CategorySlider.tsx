@@ -1,101 +1,120 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { categories } from '../../data/categories';
-import { ArrowRight, ChevronLeft, ChevronRight, Compass } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+
+interface CategoryItem {
+  id: string;
+  name: string;
+  slug: string;
+  image: string;
+  itemCount: number;
+  subtext: string;
+}
 
 export const CategorySlider: React.FC = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const scrollAmount = direction === 'left' ? -320 : 320;
-      scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  };
+  // Six dedicated categories matching the design requirements
+  const sixCategories: CategoryItem[] = [
+    {
+      id: 'fashion',
+      name: 'Fashion',
+      slug: 'fashion',
+      image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=700&q=80',
+      itemCount: 42,
+      subtext: 'Apparel & Outerwear',
+    },
+    {
+      id: 'sneakers',
+      name: 'Sneakers',
+      slug: 'sneakers',
+      image: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=700&q=80',
+      itemCount: 28,
+      subtext: 'Footwear & Streetwear',
+    },
+    {
+      id: 'electronics',
+      name: 'Electronics',
+      slug: 'electronics',
+      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80',
+      itemCount: 35,
+      subtext: 'Audio & Mobile Tech',
+    },
+    {
+      id: 'beauty',
+      name: 'Beauty',
+      slug: 'beauty',
+      image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80',
+      itemCount: 30,
+      subtext: 'Body & Essentials',
+    },
+    {
+      id: 'home',
+      name: 'Home & Living',
+      slug: 'home',
+      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=700&q=80',
+      itemCount: 24,
+      subtext: 'Decor & Living Objects',
+    },
+    {
+      id: 'accessories',
+      name: 'Accessories',
+      slug: 'accessories',
+      image: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=700&q=80',
+      itemCount: 38,
+      subtext: 'Leather & Eyewear',
+    },
+  ];
 
   return (
-    <section className="py-16 bg-white border-b border-slate-100 overflow-hidden">
+    <section className="py-16 bg-[#FAF9F6] border-b border-[#E7E5E4]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header with Navigation Controls */}
-        <div className="flex items-center justify-between mb-8">
+        {/* Section Header */}
+        <div className="flex items-end justify-between mb-8 pb-4 border-b border-[#E7E5E4]">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-[11px] font-bold tracking-wider uppercase mb-2">
-              <Compass className="w-3 h-3 text-cyan-600" />
-              <span>COLLECTIONS</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Explore by Department
+            <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">
+              DEPARTMENTS
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-[#171717] tracking-tight mt-1">
+              Shop by Category
             </h2>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Scroll Navigation Buttons */}
-            <div className="hidden sm:flex items-center gap-1.5 bg-slate-100 p-1 rounded-full border border-slate-200">
-              <button
-                onClick={() => scroll('left')}
-                className="p-2 rounded-full hover:bg-white text-slate-700 hover:text-slate-900 transition-all shadow-2xs"
-                aria-label="Scroll left"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => scroll('right')}
-                className="p-2 rounded-full hover:bg-white text-slate-700 hover:text-slate-900 transition-all shadow-2xs"
-                aria-label="Scroll right"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            <Link
-              to="/shop"
-              className="text-xs sm:text-sm font-bold text-slate-900 hover:text-indigo-600 flex items-center gap-1 group ml-2"
-            >
-              <span>View All</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          </div>
+          <Link
+            to="/shop"
+            className="text-xs sm:text-sm font-semibold text-[#171717] hover:text-[#6554D9] flex items-center gap-1 transition-colors"
+          >
+            <span>View All Departments</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
-        {/* Horizontal Category Cards Snap Track */}
-        <div
-          ref={scrollRef}
-          className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory"
-        >
-          {categories.map((cat, idx) => (
-            <motion.div
+        {/* 6 Category Cards Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
+          {sixCategories.map((cat) => (
+            <Link
               key={cat.id}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: idx * 0.05 }}
-              whileHover={{ y: -6 }}
-              className="snap-start group flex-shrink-0 w-44 sm:w-52 bg-slate-50 hover:bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 hover:border-slate-300 hover:shadow-card transition-all text-center flex flex-col items-center justify-between"
+              to={`/shop?category=${cat.slug}`}
+              className="group bg-white rounded-xl border border-[#E7E5E4] hover:border-[#171717] p-3 flex flex-col transition-all duration-300"
             >
-              <Link to={`/shop?category=${cat.slug}`} className="w-full flex flex-col items-center">
-                {/* Image Box */}
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white p-2 border border-slate-100 overflow-hidden shadow-xs mb-3 group-hover:scale-105 transition-transform duration-300">
-                  <img
-                    src={cat.image}
-                    alt={cat.name}
-                    className="w-full h-full object-cover rounded-xl"
-                  />
-                </div>
+              {/* Product-First Photography Frame */}
+              <div className="aspect-square w-full rounded-lg overflow-hidden bg-[#FAF9F6] mb-3">
+                <img
+                  src={cat.image}
+                  alt={cat.name}
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500"
+                />
+              </div>
 
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+              {/* Title & Item Count */}
+              <div className="mt-auto">
+                <h3 className="text-sm font-bold text-[#171717] group-hover:text-black transition-colors">
                   {cat.name}
                 </h3>
-                <p className="text-[11px] font-semibold text-slate-400 mt-0.5">
-                  {cat.itemCount} Curated Pieces
+                <p className="text-[11px] text-[#737373] mt-0.5">
+                  {cat.subtext}
                 </p>
-
-                <span className="mt-3 text-xs font-bold text-slate-700 group-hover:text-black flex items-center gap-1">
-                  <span>Explore</span>
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </Link>
-            </motion.div>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
-  Star,
   Heart,
   ShoppingBag,
   ShieldCheck,
@@ -48,9 +47,9 @@ export const ProductDetailsPage: React.FC = () => {
 
   if (!product) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-2xl font-bold text-slate-800">Product Not Found</h2>
-        <p className="text-slate-500 mt-2">The product you are looking for might have been moved or discontinued.</p>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center bg-[#FAF9F6]">
+        <h2 className="text-2xl font-bold text-[#171717]">Product Not Found</h2>
+        <p className="text-[#737373] mt-2">The product you are looking for might have been moved or discontinued.</p>
         <Link to="/shop" className="mt-6">
           <Button variant="primary">Return to Shop</Button>
         </Link>
@@ -95,30 +94,30 @@ export const ProductDetailsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-20 pt-6">
+    <div className="min-h-screen bg-[#FAF9F6] pb-20 pt-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-xs text-slate-500 mb-6 flex-wrap">
-          <Link to="/" className="hover:text-slate-900 transition-colors">
+        <nav className="flex items-center gap-2 text-xs text-[#737373] mb-6 flex-wrap">
+          <Link to="/" className="hover:text-[#171717] transition-colors">
             Home
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <Link to="/shop" className="hover:text-slate-900 transition-colors">
+          <ChevronRight className="w-3.5 h-3.5 text-[#E7E5E4]" />
+          <Link to="/shop" className="hover:text-[#171717] transition-colors">
             Shop
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+          <ChevronRight className="w-3.5 h-3.5 text-[#E7E5E4]" />
           <Link
             to={`/shop?category=${product.category}`}
-            className="capitalize hover:text-slate-900 transition-colors"
+            className="capitalize hover:text-[#171717] transition-colors"
           >
             {product.category}
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <span className="font-semibold text-slate-900 truncate max-w-xs">{product.name}</span>
+          <ChevronRight className="w-3.5 h-3.5 text-[#E7E5E4]" />
+          <span className="font-semibold text-[#171717] truncate max-w-xs">{product.name}</span>
         </nav>
 
         {/* Main Product Section */}
-        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-subtle p-6 sm:p-10">
+        <div className="bg-white rounded-2xl border border-[#E7E5E4] p-6 sm:p-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             {/* Gallery Column (Left) */}
             <div className="lg:col-span-7 flex flex-col-reverse sm:flex-row gap-4 items-start">
@@ -129,10 +128,10 @@ export const ProductDetailsPage: React.FC = () => {
                     <button
                       key={idx}
                       onClick={() => setSelectedImgIndex(idx)}
-                      className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-2 overflow-hidden shrink-0 transition-all ${
+                      className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl border overflow-hidden shrink-0 transition-all ${
                         selectedImgIndex === idx
-                          ? 'border-indigo-600 ring-2 ring-indigo-500/20'
-                          : 'border-slate-200 hover:border-slate-400 bg-slate-50'
+                          ? 'border-[#171717] ring-1 ring-[#171717]'
+                          : 'border-[#E7E5E4] hover:border-neutral-400 bg-[#FAF9F6]'
                       }`}
                     >
                       <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
@@ -142,18 +141,18 @@ export const ProductDetailsPage: React.FC = () => {
               )}
 
               {/* Main Image Display */}
-              <div className="relative flex-1 aspect-square w-full rounded-2xl bg-slate-50 border border-slate-100 overflow-hidden flex items-center justify-center p-6">
+              <div className="relative flex-1 aspect-square w-full rounded-xl bg-[#FAF9F6] border border-[#E7E5E4] overflow-hidden flex items-center justify-center p-6">
                 <img
                   src={gallery[selectedImgIndex] || product.image}
                   alt={product.name}
-                  className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
+                  className="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 hover:scale-103"
                 />
 
                 {/* Badges */}
-                <div className="absolute top-4 left-4 flex flex-col gap-2">
+                <div className="absolute top-4 left-4 flex flex-col gap-1.5">
                   {product.discount > 0 && <Badge variant="discount">{product.discount}% OFF</Badge>}
                   {product.isNewArrival && (
-                    <span className="bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md uppercase">
+                    <span className="bg-[#171717] text-white text-[9px] font-bold px-2 py-0.5 rounded tracking-wider uppercase">
                       New
                     </span>
                   )}
@@ -162,7 +161,7 @@ export const ProductDetailsPage: React.FC = () => {
                 {/* Share Button */}
                 <button
                   onClick={handleShare}
-                  className="absolute top-4 right-4 p-2.5 rounded-full bg-white/80 hover:bg-white text-slate-600 shadow-sm transition-colors"
+                  className="absolute top-4 right-4 p-2 rounded-lg bg-white/90 hover:bg-white text-[#737373] hover:text-[#171717] border border-[#E7E5E4] transition-colors"
                   title="Share product"
                 >
                   <Share2 className="w-4 h-4" />
@@ -174,35 +173,35 @@ export const ProductDetailsPage: React.FC = () => {
             <div className="lg:col-span-5 space-y-6">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider">
+                  <span className="text-xs font-semibold text-[#737373] uppercase tracking-wider">
                     {product.brand}
                   </span>
                   {product.sku && (
-                    <span className="text-[11px] text-slate-400 font-mono">SKU: {product.sku}</span>
+                    <span className="text-[11px] text-[#737373] font-mono">SKU: {product.sku}</span>
                   )}
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                <h1 className="text-2xl sm:text-3xl font-black text-[#171717] tracking-tight">
                   {product.name}
                 </h1>
 
-                {/* Rating */}
+                {/* Rating & Stock */}
                 <div className="mt-3 flex items-center gap-3">
                   <RatingStars rating={product.rating} reviewCount={product.reviewCount} />
-                  <span className="text-xs text-slate-300">•</span>
-                  <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1">
-                    <Check className="w-3.5 h-3.5" /> In Stock & Ready to Dispatch
+                  <span className="text-xs text-[#E7E5E4]">•</span>
+                  <span className="text-xs font-semibold text-emerald-700 flex items-center gap-1">
+                    <Check className="w-3.5 h-3.5 text-emerald-600" /> In Stock & Ready to Ship
                   </span>
                 </div>
               </div>
 
-              {/* Price */}
-              <div className="flex items-baseline gap-3 pt-2 border-t border-slate-100">
-                <span className="text-3xl sm:text-4xl font-black text-slate-900">
+              {/* Price Row */}
+              <div className="flex items-baseline gap-3 pt-2 border-t border-[#E7E5E4]">
+                <span className="text-3xl sm:text-4xl font-black text-[#171717]">
                   {formatPrice(product.price)}
                 </span>
                 {product.originalPrice > product.price && (
-                  <span className="text-lg text-slate-400 line-through">
+                  <span className="text-base text-[#737373] line-through">
                     {formatPrice(product.originalPrice)}
                   </span>
                 )}
@@ -212,26 +211,26 @@ export const ProductDetailsPage: React.FC = () => {
               </div>
 
               {/* Short description */}
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#737373] leading-relaxed">
                 {product.description}
               </p>
 
               {/* Color Selection */}
               {product.colors && product.colors.length > 0 && (
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-800 block mb-2">
-                    Color: <span className="text-indigo-600 font-bold">{selectedColor}</span>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#171717] block mb-2">
+                    Color: <span className="font-semibold text-[#737373]">{selectedColor}</span>
                   </label>
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-2">
                     {product.colors.map((c) => (
                       <button
                         key={c.name}
                         onClick={() => setSelectedColor(c.name)}
                         title={c.name}
-                        className={`w-8 h-8 rounded-full border-2 transition-transform ${
+                        className={`w-7 h-7 rounded-full border transition-all ${
                           selectedColor === c.name
-                            ? 'border-indigo-600 ring-2 ring-indigo-500/20 scale-110'
-                            : 'border-slate-300 hover:scale-105'
+                            ? 'ring-2 ring-[#171717] border-white scale-105'
+                            : 'border-[#E7E5E4] hover:scale-105'
                         }`}
                         style={{ backgroundColor: c.hex }}
                       />
@@ -244,22 +243,19 @@ export const ProductDetailsPage: React.FC = () => {
               {product.sizes && product.sizes.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                      Size: <span className="text-indigo-600 font-bold">{selectedSize}</span>
+                    <label className="text-xs font-bold uppercase tracking-wider text-[#171717]">
+                      Size: <span className="font-semibold text-[#737373]">{selectedSize}</span>
                     </label>
-                    <span className="text-xs text-indigo-600 hover:underline cursor-pointer font-medium">
-                      Size Guide
-                    </span>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {product.sizes.map((s) => (
                       <button
                         key={s}
                         onClick={() => setSelectedSize(s)}
-                        className={`min-w-12 py-2 px-3 text-xs font-bold rounded-xl border transition-all ${
+                        className={`min-w-12 py-2 px-3 text-xs font-semibold rounded-lg border transition-all ${
                           selectedSize === s
-                            ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
-                            : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
+                            ? 'bg-[#171717] text-white border-[#171717]'
+                            : 'bg-white text-[#171717] border-[#E7E5E4] hover:border-[#171717]'
                         }`}
                       >
                         {s}
@@ -269,22 +265,22 @@ export const ProductDetailsPage: React.FC = () => {
                 </div>
               )}
 
-              {/* Quantity & CTA Buttons */}
+              {/* Quantity & Actions */}
               <div className="pt-2 space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center border border-slate-200 rounded-xl bg-slate-50 p-1">
+                  <div className="flex items-center border border-[#E7E5E4] rounded-lg bg-[#FAF9F6] p-1">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-9 h-9 flex items-center justify-center text-slate-600 hover:bg-white rounded-lg text-sm font-bold transition-colors"
+                      className="w-8 h-8 flex items-center justify-center text-[#171717] hover:bg-white rounded text-sm font-bold transition-colors"
                     >
                       -
                     </button>
-                    <span className="w-10 text-center text-sm font-bold text-slate-900">
+                    <span className="w-8 text-center text-xs font-bold text-[#171717]">
                       {quantity}
                     </span>
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="w-9 h-9 flex items-center justify-center text-slate-600 hover:bg-white rounded-lg text-sm font-bold transition-colors"
+                      className="w-8 h-8 flex items-center justify-center text-[#171717] hover:bg-white rounded text-sm font-bold transition-colors"
                     >
                       +
                     </button>
@@ -298,85 +294,104 @@ export const ProductDetailsPage: React.FC = () => {
                         'info'
                       );
                     }}
-                    className={`p-3 rounded-xl border transition-colors ${
+                    className={`p-3 rounded-lg border transition-colors ${
                       isFavorited
-                        ? 'border-rose-200 bg-rose-50 text-rose-500'
-                        : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                        ? 'border-[#171717] bg-white text-rose-600'
+                        : 'border-[#E7E5E4] text-[#737373] hover:text-[#171717] hover:border-[#171717]'
                     }`}
                     title="Wishlist"
                   >
-                    <Heart className={`w-5 h-5 ${isFavorited ? 'fill-rose-500' : ''}`} />
+                    <Heart className={`w-4 h-4 ${isFavorited ? 'fill-rose-600' : ''}`} />
                   </button>
 
                   <Button
                     variant="primary"
                     size="lg"
-                    className="flex-1 bg-indigo-600 hover:bg-indigo-500 font-bold"
+                    className="flex-1 bg-[#171717] hover:bg-black text-white font-bold rounded-lg"
                     onClick={handleAddToCart}
-                    leftIcon={<ShoppingBag className="w-5 h-5" />}
+                    leftIcon={<ShoppingBag className="w-4 h-4" />}
                   >
                     Add to Cart
                   </Button>
                 </div>
 
                 <Button
-                  variant="dark"
+                  variant="outline"
                   size="lg"
-                  className="w-full font-bold"
+                  className="w-full font-bold border-[#E7E5E4] hover:border-[#171717] rounded-lg"
                   onClick={handleBuyNow}
                 >
                   Buy Now
                 </Button>
               </div>
 
-              {/* Value Props & Guarantees */}
-              <div className="pt-6 border-t border-slate-100 grid grid-cols-3 gap-3 text-center">
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex flex-col items-center">
-                  <ShieldCheck className="w-5 h-5 text-indigo-600 mb-1" />
-                  <span className="text-[11px] font-bold text-slate-800">Premium Quality</span>
-                  <span className="text-[10px] text-slate-500">100% Authentic</span>
+              {/* Value Props */}
+              <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[#E7E5E4] text-center">
+                <div className="p-3 rounded-lg bg-[#FAF9F6] border border-[#E7E5E4]">
+                  <Truck className="w-4 h-4 text-[#171717] mx-auto mb-1" />
+                  <p className="text-[11px] font-bold text-[#171717]">Express Delivery</p>
+                  <p className="text-[10px] text-[#737373]">Free over ₹999</p>
                 </div>
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex flex-col items-center">
-                  <Truck className="w-5 h-5 text-indigo-600 mb-1" />
-                  <span className="text-[11px] font-bold text-slate-800">Fast Delivery</span>
-                  <span className="text-[10px] text-slate-500">3-5 Business Days</span>
+
+                <div className="p-3 rounded-lg bg-[#FAF9F6] border border-[#E7E5E4]">
+                  <ShieldCheck className="w-4 h-4 text-[#171717] mx-auto mb-1" />
+                  <p className="text-[11px] font-bold text-[#171717]">Verified Genuine</p>
+                  <p className="text-[10px] text-[#737373]">Authentic guarantee</p>
                 </div>
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex flex-col items-center">
-                  <RotateCcw className="w-5 h-5 text-indigo-600 mb-1" />
-                  <span className="text-[11px] font-bold text-slate-800">Easy Returns</span>
-                  <span className="text-[10px] text-slate-500">7-Day Guarantee</span>
+
+                <div className="p-3 rounded-lg bg-[#FAF9F6] border border-[#E7E5E4]">
+                  <RotateCcw className="w-4 h-4 text-[#171717] mx-auto mb-1" />
+                  <p className="text-[11px] font-bold text-[#171717]">7-Day Returns</p>
+                  <p className="text-[10px] text-[#737373]">Simple pickup</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Features and Specs */}
+          {/* Product Specifications Table */}
           {product.features && product.features.length > 0 && (
-            <div className="mt-12 pt-8 border-t border-slate-100">
-              <h3 className="text-lg font-bold text-slate-900 mb-4">Highlights & Specifications</h3>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-600">
-                {product.features.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-2.5">
-                    <div className="w-5 h-5 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 mt-0.5">
-                      <Check className="w-3 h-3" />
-                    </div>
-                    <span>{feature}</span>
-                  </li>
+            <div className="mt-12 pt-8 border-t border-[#E7E5E4]">
+              <h3 className="text-base font-bold text-[#171717] mb-4">
+                Specifications & Highlights
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {product.features.map((feat, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-2.5 p-3 rounded-lg bg-[#FAF9F6] border border-[#E7E5E4] text-xs text-[#171717]"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#6554D9] mt-1.5 shrink-0" />
+                    <span>{feat}</span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
         </div>
 
-        {/* Related Products Carousel */}
+        {/* Related Products */}
         {relatedProducts.length > 0 && (
           <div className="mt-16">
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mb-6">
-              You May Also Like
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              {relatedProducts.map((p) => (
-                <ProductCard key={p.id} product={p} />
+            <div className="flex items-end justify-between mb-6 pb-3 border-b border-[#E7E5E4]">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">
+                  COMPLEMENTARY PIECES
+                </span>
+                <h3 className="text-xl sm:text-2xl font-bold text-[#171717] mt-1">
+                  You May Also Like
+                </h3>
+              </div>
+              <Link
+                to={`/shop?category=${product.category}`}
+                className="text-xs font-semibold text-[#171717] hover:text-[#6554D9] transition-colors"
+              >
+                View Category →
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+              {relatedProducts.map((rel) => (
+                <ProductCard key={rel.id} product={rel} />
               ))}
             </div>
           </div>

@@ -27,27 +27,27 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed select-none';
+      'inline-flex items-center justify-center font-semibold rounded-lg transition-colors duration-150 focus:outline-none focus:ring-1 focus:ring-[#171717] disabled:opacity-50 disabled:cursor-not-allowed select-none';
 
     const variants = {
       primary:
-        'bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white shadow-md shadow-indigo-600/20 hover:shadow-indigo-600/30 focus:ring-indigo-500',
+        'bg-[#171717] hover:bg-black text-white active:bg-neutral-900 shadow-2xs',
       secondary:
-        'bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 border border-slate-200 focus:ring-slate-400',
+        'bg-[#FAF9F6] hover:bg-white text-[#171717] border border-[#E7E5E4] hover:border-[#171717]',
       dark:
-        'bg-slate-900 hover:bg-slate-800 active:bg-black text-white shadow-sm focus:ring-slate-800',
+        'bg-[#171717] hover:bg-black text-white',
       outline:
-        'border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 focus:ring-slate-400',
+        'border border-[#E7E5E4] hover:border-[#171717] bg-white hover:bg-[#FAF9F6] text-[#171717]',
       ghost:
-        'bg-transparent hover:bg-slate-100 text-slate-600 hover:text-slate-900 focus:ring-slate-300',
+        'bg-transparent hover:bg-[#FAF9F6] text-[#737373] hover:text-[#171717]',
       danger:
-        'bg-rose-600 hover:bg-rose-500 text-white shadow-sm focus:ring-rose-500',
+        'bg-red-600 hover:bg-red-700 text-white',
     };
 
     const sizes = {
-      sm: 'text-xs px-3 py-1.5 gap-1.5 rounded-lg',
-      md: 'text-sm px-4 py-2.5 gap-2',
-      lg: 'text-base px-6 py-3.5 gap-2.5 rounded-xl font-medium',
+      sm: 'text-xs px-3 py-1.5 gap-1.5 rounded-md',
+      md: 'text-xs sm:text-sm px-4 py-2.5 gap-2 rounded-lg',
+      lg: 'text-sm sm:text-base px-6 py-3.5 gap-2.5 rounded-lg font-medium',
     };
 
     return (

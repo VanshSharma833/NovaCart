@@ -47,11 +47,11 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
     <div className="space-y-6">
       {/* Mobile Header */}
       {isMobile && (
-        <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-          <h3 className="text-base font-bold text-slate-900">Filters</h3>
+        <div className="flex items-center justify-between pb-4 border-b border-[#E7E5E4]">
+          <h3 className="text-sm font-bold text-[#171717]">Refine Catalog</h3>
           <button
             onClick={onCloseMobile}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-600"
+            className="p-1 rounded-md text-[#737373] hover:text-[#171717]"
           >
             <X className="w-5 h-5" />
           </button>
@@ -60,12 +60,12 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
 
       {/* Header & Reset */}
       <div className="flex items-center justify-between">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-[#171717]">
           Filters
         </h4>
         <button
           onClick={onReset}
-          className="text-xs text-indigo-600 hover:text-indigo-700 font-semibold flex items-center gap-1"
+          className="text-xs text-[#737373] hover:text-[#171717] font-medium flex items-center gap-1 transition-colors"
         >
           <RotateCcw className="w-3 h-3" />
           <span>Reset</span>
@@ -73,45 +73,51 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
       </div>
 
       {/* Category Filter */}
-      <div className="pt-4 border-t border-slate-100">
-        <h5 className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">
-          Category
+      <div className="pt-4 border-t border-[#E7E5E4]">
+        <h5 className="text-[11px] font-bold uppercase tracking-wider text-[#737373] mb-3">
+          Department
         </h5>
-        <div className="space-y-2">
+        <div className="space-y-1">
           <button
             onClick={() => handleCategoryChange('')}
-            className={`w-full text-left text-xs font-medium px-2 py-1.5 rounded-lg transition-colors flex items-center justify-between ${
+            className={`w-full text-left text-xs px-2.5 py-1.5 rounded-md transition-colors flex items-center justify-between ${
               filters.category === ''
-                ? 'bg-indigo-50 text-indigo-600 font-bold'
-                : 'text-slate-600 hover:bg-slate-50'
+                ? 'bg-[#171717] text-white font-semibold'
+                : 'text-[#171717] hover:bg-[#FAF9F6]'
             }`}
           >
-            <span>All Categories</span>
+            <span>All Departments</span>
           </button>
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => handleCategoryChange(cat.slug)}
-              className={`w-full text-left text-xs font-medium px-2 py-1.5 rounded-lg transition-colors flex items-center justify-between ${
+              className={`w-full text-left text-xs px-2.5 py-1.5 rounded-md transition-colors flex items-center justify-between ${
                 filters.category === cat.slug
-                  ? 'bg-indigo-50 text-indigo-600 font-bold'
-                  : 'text-slate-600 hover:bg-slate-50'
+                  ? 'bg-[#171717] text-white font-semibold'
+                  : 'text-[#171717] hover:bg-[#FAF9F6]'
               }`}
             >
               <span>{cat.name}</span>
-              <span className="text-[11px] text-slate-400">({cat.itemCount})</span>
+              <span
+                className={`text-[10px] ${
+                  filters.category === cat.slug ? 'text-white/70' : 'text-[#737373]'
+                }`}
+              >
+                {cat.itemCount}
+              </span>
             </button>
           ))}
         </div>
       </div>
 
       {/* Price Range Slider */}
-      <div className="pt-4 border-t border-slate-100">
+      <div className="pt-4 border-t border-[#E7E5E4]">
         <div className="flex items-center justify-between mb-2">
-          <h5 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+          <h5 className="text-[11px] font-bold uppercase tracking-wider text-[#737373]">
             Price Range
           </h5>
-          <span className="text-xs font-bold text-indigo-600">
+          <span className="text-xs font-bold text-[#171717]">
             Up to {formatPrice(filters.maxPrice)}
           </span>
         </div>
@@ -122,30 +128,30 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
           step="1000"
           value={filters.maxPrice}
           onChange={handlePriceChange}
-          className="w-full accent-indigo-600 cursor-pointer"
+          className="w-full accent-[#171717] bg-[#E7E5E4] h-1.5 rounded-lg appearance-none cursor-pointer"
         />
-        <div className="flex justify-between text-[11px] text-slate-400 mt-1">
+        <div className="flex justify-between text-[10px] text-[#737373] mt-1">
           <span>₹1,000</span>
           <span>₹85,000</span>
         </div>
       </div>
 
       {/* Brand Filter */}
-      <div className="pt-4 border-t border-slate-100">
-        <h5 className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">
+      <div className="pt-4 border-t border-[#E7E5E4]">
+        <h5 className="text-[11px] font-bold uppercase tracking-wider text-[#737373] mb-3">
           Brand
         </h5>
-        <div className="space-y-2 max-h-48 overflow-y-auto pr-1 no-scrollbar">
+        <div className="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar">
           {availableBrands.map((brand) => (
             <label
               key={brand}
-              className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer hover:text-indigo-600 select-none"
+              className="flex items-center gap-2.5 text-xs text-[#171717] hover:text-black cursor-pointer select-none py-0.5"
             >
               <input
                 type="checkbox"
                 checked={filters.brands.includes(brand)}
                 onChange={() => handleBrandToggle(brand)}
-                className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5"
+                className="w-3.5 h-3.5 rounded border-[#E7E5E4] text-[#171717] focus:ring-0 cursor-pointer accent-[#171717]"
               />
               <span>{brand}</span>
             </label>
@@ -153,38 +159,38 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
         </div>
       </div>
 
-      {/* Rating Filter */}
-      <div className="pt-4 border-t border-slate-100">
-        <h5 className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">
+      {/* Minimum Rating Filter */}
+      <div className="pt-4 border-t border-[#E7E5E4]">
+        <h5 className="text-[11px] font-bold uppercase tracking-wider text-[#737373] mb-3">
           Minimum Rating
         </h5>
-        <div className="flex gap-2">
-          {[4.5, 4.0, 3.0].map((ratingVal) => (
+        <div className="flex flex-wrap gap-1.5">
+          {[4, 4.5, 4.8].map((stars) => (
             <button
-              key={ratingVal}
-              onClick={() => handleRatingChange(ratingVal)}
-              className={`flex-1 py-1.5 px-2 text-xs font-semibold rounded-lg border transition-all ${
-                filters.rating === ratingVal
-                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                  : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
+              key={stars}
+              onClick={() => handleRatingChange(stars)}
+              className={`py-1 px-2.5 rounded-md text-xs font-medium border transition-colors ${
+                filters.rating === stars
+                  ? 'bg-[#171717] text-white border-[#171717]'
+                  : 'bg-white text-[#171717] border-[#E7E5E4] hover:border-[#171717]'
               }`}
             >
-              ★ {ratingVal}+
+              ★ {stars}+
             </button>
           ))}
         </div>
       </div>
 
-      {/* In-Stock Filter */}
-      <div className="pt-4 border-t border-slate-100">
-        <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer select-none">
+      {/* In Stock Toggle */}
+      <div className="pt-4 border-t border-[#E7E5E4]">
+        <label className="flex items-center justify-between cursor-pointer select-none">
+          <span className="text-xs font-medium text-[#171717]">In Stock Only</span>
           <input
             type="checkbox"
             checked={filters.inStockOnly}
             onChange={(e) => onChange({ ...filters, inStockOnly: e.target.checked })}
-            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5"
+            className="w-4 h-4 rounded border-[#E7E5E4] text-[#171717] focus:ring-0 accent-[#171717]"
           />
-          <span>In Stock Only</span>
         </label>
       </div>
     </div>

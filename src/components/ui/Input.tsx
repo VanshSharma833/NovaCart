@@ -17,14 +17,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5"
+            className="block text-xs font-medium text-[#171717] mb-1.5"
           >
             {label}
           </label>
         )}
         <div className="relative flex items-center">
           {leftIcon && (
-            <div className="absolute left-3.5 text-slate-400 pointer-events-none flex items-center">
+            <div className="absolute left-3.5 text-[#737373] pointer-events-none flex items-center">
               {leftIcon}
             </div>
           )}
@@ -32,16 +32,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={cn(
-              'w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 disabled:opacity-50 disabled:bg-slate-50',
+              'w-full bg-white border border-[#E7E5E4] rounded-lg px-3.5 py-2 text-xs sm:text-sm text-[#171717] placeholder:text-[#737373] transition-colors focus:outline-none focus:border-[#171717] disabled:opacity-50 disabled:bg-[#FAF9F6]',
               Boolean(leftIcon) && 'pl-10',
               Boolean(rightIcon) && 'pr-10',
-              Boolean(error) && 'border-rose-400 focus:border-rose-500 focus:ring-rose-500/20',
+              Boolean(error) && 'border-rose-400 focus:border-rose-500',
               className
             )}
             {...props}
           />
           {rightIcon && (
-            <div className="absolute right-3.5 text-slate-400 flex items-center">
+            <div className="absolute right-3.5 text-[#737373] flex items-center">
               {rightIcon}
             </div>
           )}
