@@ -102,10 +102,14 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({
                     setSelectedImage(idx);
                     setMainImgSrc(img);
                   }}
+                  onMouseEnter={() => {
+                    setSelectedImage(idx);
+                    setMainImgSrc(img);
+                  }}
                   className={`w-14 h-14 rounded-lg border overflow-hidden shrink-0 transition-all cursor-pointer ${
                     selectedImage === idx
-                      ? 'border-[#171717] ring-1 ring-[#171717]'
-                      : 'border-[#E7E5E4] hover:border-neutral-400 bg-[#FAF9F6]'
+                      ? 'border-cyan-400 ring-2 ring-cyan-400/50 scale-105'
+                      : 'border-white/10 hover:border-white/40 bg-slate-900'
                   }`}
                   aria-label={`View photo ${idx + 1}`}
                 >
@@ -115,7 +119,7 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({
                     onError={(e) => {
                       e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
                     }}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                   />
                 </button>
               ))}

@@ -18,14 +18,21 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) => {
   const [quickViewOpen, setQuickViewOpen] = useState(false);
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
-  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [clickedIndex, setClickedIndex] = useState<number | null>(null);
   const [hasAdded, setHasAdded] = useState(false);
 
   const availableImages = product.images && product.images.length > 0
     ? product.images
     : [product.image];
 
-  const currentImg = availableImages[currentImgIndex] || product.image;
+  // When cursor hovers over the card/pic, smoothly transition to alternate angle (index 1)
+  // If user clicked or selected an angle, respect that chosen angle
+  const activeIndex = clickedIndex !== null
+    ? clickedIndex
+    : (isHovered && availableImages.length > 1 ? 1 : 0);
+
+  const currentImg = availableImages[activeIndex] || product.image;
 
   const { addToCart, setIsCartOpen } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
@@ -38,19 +45,27 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
       e.preventDefault();
       e.stopPropagation();
     }
-    setCurrentImgIndex((prev) => (prev + 1) % availableImages.length);
+    const currentIndex = clickedIndex !== null
+      ? clickedIndex
+      : (isHovered && availableImages.length > 1 ? 1 : 0);
+    const next = (currentIndex + 1) % availableImages.length;
+    setClickedIndex(next);
   };
 
   const handlePrevImage = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setCurrentImgIndex((prev) => (prev - 1 + availableImages.length) % availableImages.length);
+    const currentIndex = clickedIndex !== null
+      ? clickedIndex
+      : (isHovered && availableImages.length > 1 ? 1 : 0);
+    const prev = (currentIndex - 1 + availableImages.length) % availableImages.length;
+    setClickedIndex(prev);
   };
 
   const handleSelectImageIndex = (idx: number, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setCurrentImgIndex(idx);
+    setClickedIndex(idx);
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -85,31 +100,36 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
       <motion.div
         whileHover={{ y: -4 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => {
+          setIsHovered(false);
+          setClickedIndex(null);
+        }}
         className={`group relative bg-[#0E1424] rounded-2xl border border-white/10 hover:border-white/30 hover:shadow-2xl transition-all duration-300 flex flex-col h-full overflow-hidden text-white ${
           className || ''
         }`}
       >
-        {/* Product Image Frame with Click-to-Cycle Animation */}
+        {/* Product Image Frame with Hover-Change & Click-to-Cycle Animation */}
         <div
           onClick={handleNextImage}
           className="relative aspect-square w-full bg-[#131A2E] overflow-hidden flex items-center justify-center p-3 select-none cursor-pointer group/image"
-          title="Click to cycle angle / view"
+          title="Hover to preview angle • Click to cycle"
         >
           {/* Animated Product Picture with Motion */}
           <div className="w-full h-full relative rounded-xl overflow-hidden flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.img
-                key={currentImgIndex}
+                key={activeIndex}
                 src={currentImg}
-                alt={`${product.name} - Angle ${currentImgIndex + 1}`}
+                alt={`${product.name} - Angle ${activeIndex + 1}`}
                 loading="lazy"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = PRODUCT_FALLBACK_IMAGE;
                 }}
-                initial={{ opacity: 0, scale: 0.94 }}
+                initial={{ opacity: 0.3, scale: 0.94 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.04 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                exit={{ opacity: 0.3, scale: 1.05 }}
+                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
                 className="w-full h-full object-contain rounded-xl group-hover/image:scale-105 transition-transform duration-500 ease-out pointer-events-none"
               />
             </AnimatePresence>
@@ -128,6 +148,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
               </span>
             )}
           </div>
+
+          {/* Hover Angle Badge */}
+          {availableImages.length > 1 && (
+            <div className="absolute top-2.5 right-12 z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <span className="bg-black/70 backdrop-blur-md border border-white/15 text-cyan-300 text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wider uppercase shadow-sm flex items-center gap-1">
+                <Sparkles className="w-2.5 h-2.5 text-cyan-400" />
+                <span>{activeIndex === 0 ? 'Front' : `Angle ${activeIndex + 1}`}</span>
+              </span>
+            </div>
+          )}
 
           {/* Animated Wishlist Heart Toggle */}
           <motion.button
@@ -179,7 +209,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
                     type="button"
                     onClick={(e) => handleSelectImageIndex(idx, e)}
                     className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                      currentImgIndex === idx
+                      activeIndex === idx
                         ? 'w-4 bg-cyan-400 shadow-xs'
                         : 'w-1.5 bg-white/40 hover:bg-white/80'
                     }`}

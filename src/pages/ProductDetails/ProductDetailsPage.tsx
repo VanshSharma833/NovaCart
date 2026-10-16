@@ -151,10 +151,11 @@ export const ProductDetailsPage: React.FC = () => {
                     <button
                       key={idx}
                       onClick={() => handleSelectThumbnail(idx, img)}
+                      onMouseEnter={() => handleSelectThumbnail(idx, img)}
                       className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl border overflow-hidden shrink-0 transition-all cursor-pointer ${
                         selectedImgIndex === idx
-                          ? 'border-[#171717] ring-1 ring-[#171717]'
-                          : 'border-[#E7E5E4] hover:border-neutral-400 bg-[#FAF9F6]'
+                          ? 'border-cyan-400 ring-2 ring-cyan-400/50 scale-105'
+                          : 'border-white/10 hover:border-white/40 bg-slate-900'
                       }`}
                       aria-label={`View photo ${idx + 1}`}
                     >
@@ -164,7 +165,7 @@ export const ProductDetailsPage: React.FC = () => {
                         onError={(e) => {
                           e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
                         }}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                       />
                     </button>
                   ))}
@@ -172,7 +173,14 @@ export const ProductDetailsPage: React.FC = () => {
               )}
 
               {/* Main Image Display with Motion Animation */}
-              <div className="relative flex-1 aspect-square w-full rounded-xl bg-[#FAF9F6] border border-[#E7E5E4] overflow-hidden flex items-center justify-center p-6 select-none">
+              <div
+                onClick={() => {
+                  const nextIdx = (selectedImgIndex + 1) % gallery.length;
+                  handleSelectThumbnail(nextIdx, gallery[nextIdx]);
+                }}
+                className="relative flex-1 aspect-square w-full rounded-2xl bg-slate-900 border border-white/10 overflow-hidden flex items-center justify-center p-6 select-none cursor-pointer group/main"
+                title="Click to cycle angle"
+              >
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={selectedImgIndex}
