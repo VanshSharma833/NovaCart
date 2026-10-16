@@ -67,22 +67,22 @@ export const CategorySlider: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 bg-[#FAF9F6] border-b border-[#E7E5E4]">
+    <section className="py-16 bg-[#070A12] border-b border-white/10 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex items-end justify-between mb-8 pb-4 border-b border-[#E7E5E4]">
+        <div className="flex items-end justify-between mb-8 pb-4 border-b border-white/10">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">
-              DEPARTMENTS
+            <span className="text-xs font-bold uppercase tracking-widest text-cyan-400">
+              DEPARTMENTS • EXPLORE BY SPHERE
             </span>
-            <h2 className="text-2xl sm:text-3xl font-medium text-[#171717] tracking-tight mt-1">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
               Shop by Category
             </h2>
           </div>
 
           <Link
             to="/shop"
-            className="text-xs sm:text-sm font-semibold text-[#171717] hover:text-[#6554D9] flex items-center gap-1 transition-colors"
+            className="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors"
           >
             <span>View All</span>
             <ArrowRight className="w-4 h-4" />
@@ -94,15 +94,16 @@ export const CategorySlider: React.FC = () => {
           {sixCategories.map((cat) => (
             <motion.div
               key={cat.id}
-              whileHover={{ y: -3 }}
+              whileHover={{ y: -5, scale: 1.02 }}
+              whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2 }}
             >
               <Link
                 to={`/shop?category=${cat.slug}`}
-                className="group bg-white rounded-xl border border-[#E7E5E4] hover:border-[#171717] p-3 flex flex-col h-full transition-colors shadow-2xs block"
+                className="group bg-[#0E1424] rounded-xl border border-white/10 hover:border-white/30 p-3 flex flex-col h-full transition-all shadow-xl block"
               >
                 {/* Product-First Photography Frame */}
-                <div className="aspect-square w-full rounded-lg overflow-hidden bg-[#FAF9F6] mb-3">
+                <div className="aspect-square w-full rounded-lg overflow-hidden bg-slate-950 mb-3 border border-white/5">
                   <img
                     src={cat.image}
                     alt={cat.name}
@@ -110,16 +111,16 @@ export const CategorySlider: React.FC = () => {
                     onError={(e) => {
                       e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
                     }}
-                    className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
                   />
                 </div>
 
                 {/* Title & Item Count */}
                 <div className="mt-auto">
-                  <h3 className="text-xs sm:text-sm font-medium text-[#171717] group-hover:text-black transition-colors">
+                  <h3 className="text-xs sm:text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors">
                     {cat.name}
                   </h3>
-                  <p className="text-[11px] text-[#737373] mt-0.5">
+                  <p className="text-[11px] text-slate-400 mt-0.5">
                     {cat.subtext}
                   </p>
                 </div>

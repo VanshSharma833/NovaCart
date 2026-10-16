@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingBag, Heart, Check, AlertCircle } from 'lucide-react';
 import { Product } from '../../types';
 import { Modal } from '../ui/Modal';
@@ -74,15 +75,22 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="4xl">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start p-2">
-        {/* Left: Gallery */}
+        {/* Left: Gallery with Smooth Motion Animation */}
         <div className="space-y-3">
-          <div className="aspect-square bg-[#FAF9F6] border border-[#E7E5E4] rounded-xl overflow-hidden flex items-center justify-center p-4">
-            <img
-              src={mainImgSrc || gallery[selectedImage] || product.image}
-              alt={product.name}
-              onError={() => setMainImgSrc(PRODUCT_FALLBACK_IMAGE)}
-              className="w-full h-full object-contain mix-blend-multiply"
-            />
+          <div className="aspect-square bg-[#FAF9F6] border border-[#E7E5E4] rounded-xl overflow-hidden flex items-center justify-center p-4 relative">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={selectedImage}
+                src={gallery[selectedImage] || product.image}
+                alt={product.name}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
+                onError={() => setMainImgSrc(PRODUCT_FALLBACK_IMAGE)}
+                className="w-full h-full object-contain mix-blend-multiply"
+              />
+            </AnimatePresence>
           </div>
 
           {gallery.length > 1 && (

@@ -4,7 +4,6 @@ import { motion } from 'motion/react';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { ToastProvider } from './context/ToastContext';
-import { AnnouncementBar } from './components/layout/AnnouncementBar';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { MobileNav } from './components/layout/MobileNav';
@@ -30,8 +29,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#171717] selection:bg-[#171717] selection:text-white relative">
-      <AnnouncementBar onOpenContact={handleOpenContact} />
+    <div className="min-h-screen flex flex-col bg-[#070A12] text-slate-100 selection:bg-white selection:text-slate-950 relative">
       <Navbar onOpenContact={handleOpenContact} />
 
       {/* Main Content Route Views with subtle Page Transition */}

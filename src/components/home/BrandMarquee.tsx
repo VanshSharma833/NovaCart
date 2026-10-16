@@ -18,10 +18,10 @@ export const BrandMarquee: React.FC = () => {
   const marqueeItems = [...brands, ...brands, ...brands];
 
   return (
-    <div className="relative py-4 bg-white border-b border-[#E7E5E4] overflow-hidden select-none">
+    <div className="relative py-4 bg-[#060911] border-b border-white/10 overflow-hidden select-none">
       {/* Side Fade Gradients */}
-      <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#060911] to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#060911] to-transparent z-10 pointer-events-none" />
 
       {/* Infinite Horizontal Sliding Marquee Track */}
       <motion.div
@@ -40,13 +40,13 @@ export const BrandMarquee: React.FC = () => {
             key={idx}
             className="flex items-center gap-2 group cursor-default"
           >
-            <span className="text-xs sm:text-sm font-bold tracking-widest text-[#737373] group-hover:text-[#171717] transition-colors uppercase">
+            <span className="text-xs sm:text-sm font-bold tracking-widest text-slate-400 group-hover:text-white transition-colors uppercase">
               {brand.name}
             </span>
-            <span className="text-[10px] text-[#A8A29E] font-medium hidden sm:inline">
+            <span className="text-[10px] text-slate-500 font-medium hidden sm:inline">
               ({brand.label})
             </span>
-            <span className="text-[#E7E5E4] ml-6">•</span>
+            <span className="text-white/20 ml-6">•</span>
           </div>
         ))}
       </motion.div>

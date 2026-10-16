@@ -15,7 +15,7 @@ interface HomePageProps {
 
 export const HomePage: React.FC<HomePageProps> = ({ onOpenContact }) => {
   return (
-    <div className="min-h-screen bg-[#FAF9F6]">
+    <div className="min-h-screen bg-[#070A12] text-white selection:bg-white selection:text-slate-950">
       <HeroSection onOpenContact={onOpenContact} />
       <BrandMarquee />
       <CategorySlider />

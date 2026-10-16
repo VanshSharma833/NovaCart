@@ -95,8 +95,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 w-full transition-colors duration-200 bg-white border-b border-[#E7E5E4]',
-        isScrolled ? 'shadow-2xs' : ''
+        'sticky top-0 z-40 w-full transition-colors duration-200 bg-[#070A12]/95 backdrop-blur-md border-b border-white/10 text-white',
+        isScrolled ? 'shadow-lg shadow-black/20' : ''
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -105,7 +105,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
           <div className="flex items-center gap-3 sm:gap-6 shrink-0">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 -ml-2 text-[#171717] hover:text-black lg:hidden focus:outline-none cursor-pointer"
+              className="p-2 -ml-2 text-slate-300 hover:text-white lg:hidden focus:outline-none cursor-pointer"
               aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -114,20 +114,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
 
             {/* Editorial Minimal Logo */}
             <Link to="/" className="flex items-center gap-1.5 group select-none">
-              <span className="text-xl sm:text-2xl font-black tracking-tight text-[#171717]">
+              <span className="text-xl sm:text-2xl font-black tracking-tight text-white group-hover:text-cyan-300 transition-colors">
                 NovaCart
               </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#6554D9] inline-block" />
+              <span className="w-2 h-2 rounded-full bg-cyan-400 inline-block shadow-sm shadow-cyan-400/50" />
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-[#737373] ml-2">
+            <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-300 ml-2">
               <NavLink
                 to="/"
                 className={({ isActive }) =>
                   cn(
-                    'transition-colors hover:text-[#171717]',
-                    isActive ? 'text-[#171717] font-semibold' : ''
+                    'transition-colors hover:text-white',
+                    isActive ? 'text-white font-bold' : ''
                   )
                 }
               >
@@ -227,7 +227,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
           {/* CENTER: Search Bar with Live Suggestions Dropdown */}
           <div ref={searchContainerRef} className="flex-1 max-w-sm hidden md:flex justify-center relative">
             <form onSubmit={handleSearchSubmit} className="relative w-full">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#737373] pointer-events-none" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
               <input
                 ref={searchInputRef}
                 type="text"
@@ -236,17 +236,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search products, brands, sneakers..."
                 className={cn(
-                  'w-full text-[#171717] placeholder:text-[#737373] text-xs sm:text-sm pl-9 pr-8 py-2 rounded-lg border transition-colors outline-none',
+                  'w-full text-white placeholder:text-slate-400 text-xs sm:text-sm pl-9 pr-8 py-2 rounded-xl border transition-colors outline-none',
                   searchFocused
-                    ? 'bg-white border-[#171717]'
-                    : 'bg-[#FAF9F6] hover:bg-white border-[#E7E5E4]'
+                    ? 'bg-[#121A2E] border-cyan-400 ring-1 ring-cyan-400/30'
+                    : 'bg-[#0E1424] hover:bg-[#121A2E] border-white/15'
                 )}
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737373] hover:text-[#171717] p-0.5 cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-0.5 cursor-pointer"
                   aria-label="Clear search input"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -262,11 +262,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 6 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-[#E7E5E4] overflow-hidden z-50 max-h-96 overflow-y-auto"
+                  className="absolute top-full left-0 right-0 mt-2 bg-[#0E1424] rounded-xl shadow-2xl border border-white/15 overflow-hidden z-50 max-h-96 overflow-y-auto"
                 >
                   {searchResults.length > 0 ? (
                     <div className="p-2 space-y-1">
-                      <div className="px-3 py-1.5 text-[10px] font-semibold text-[#737373] uppercase tracking-wider">
+                      <div className="px-3 py-1.5 text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
                         Matching Products
                       </div>
                       {searchResults.map((product) => (
@@ -277,9 +277,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
                             setSearchFocused(false);
                             setSearchQuery('');
                           }}
-                          className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#FAF9F6] transition-colors group"
+                          className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 transition-colors group"
                         >
-                          <div className="w-10 h-10 rounded-md bg-[#FAF9F6] border border-[#E7E5E4] p-1 shrink-0 overflow-hidden flex items-center justify-center">
+                          <div className="w-10 h-10 rounded-md bg-white p-1 shrink-0 overflow-hidden flex items-center justify-center">
                             <img
                               src={product.image}
                               alt={product.name}
@@ -287,22 +287,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
                             />
                           </div>
                           <div className="flex-1 min-w-0 text-left">
-                            <p className="text-xs font-medium text-[#171717] group-hover:text-[#6554D9] truncate transition-colors">
+                            <p className="text-xs font-semibold text-white group-hover:text-cyan-300 truncate transition-colors">
                               {product.name}
                             </p>
-                            <p className="text-[10px] text-[#737373]">
+                            <p className="text-[10px] text-slate-400">
                               {product.brand} • {product.category}
                             </p>
                           </div>
-                          <span className="text-xs font-semibold text-[#171717]">
+                          <span className="text-xs font-bold text-white">
                             {formatPrice(product.price)}
                           </span>
                         </Link>
                       ))}
-                      <div className="pt-2 border-t border-[#E7E5E4]">
+                      <div className="pt-2 border-t border-white/10">
                         <button
                           onClick={handleSearchSubmit}
-                          className="w-full py-2 px-3 rounded-lg text-xs font-medium text-center text-[#171717] hover:bg-[#FAF9F6] flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                          className="w-full py-2 px-3 rounded-lg text-xs font-semibold text-center text-white hover:bg-white/10 flex items-center justify-center gap-1 transition-colors cursor-pointer"
                         >
                           <span>View all results for &quot;{searchQuery}&quot;</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -311,10 +311,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
                     </div>
                   ) : (
                     <div className="p-6 text-center space-y-2">
-                      <p className="text-xs text-[#171717] font-medium">
+                      <p className="text-xs text-white font-medium">
                         No products found for &quot;{searchQuery}&quot;
                       </p>
-                      <p className="text-[11px] text-[#737373]">
+                      <p className="text-[11px] text-slate-400">
                         Try checking your spelling or search by category name.
                       </p>
                     </div>
@@ -325,57 +325,63 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
           </div>
 
           {/* RIGHT: Direct Mail, Wishlist, Cart & Profile */}
-          <div className="flex items-center gap-1 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
             {/* Direct Mail concierge button */}
-            <button
+            <motion.button
+              whileTap={{ scale: 0.94 }}
               type="button"
               onClick={onOpenContact}
-              className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[#171717] hover:bg-[#FAF9F6] border border-[#E7E5E4] transition-colors cursor-pointer"
+              className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-white bg-white/10 hover:bg-white/15 border border-white/15 transition-all cursor-pointer"
               title="Direct Mail Support"
             >
-              <Mail className="w-3.5 h-3.5 text-[#737373]" />
+              <Mail className="w-3.5 h-3.5 text-cyan-400" />
               <span>Contact</span>
-            </button>
+            </motion.button>
 
             {/* Wishlist Button */}
-            <Link
-              to="/wishlist"
-              className="relative p-2 rounded-lg text-[#171717] hover:bg-[#FAF9F6] transition-colors"
-              title="Saved Items"
-              aria-label="Wishlist"
-            >
-              <Heart className="w-5 h-5 text-[#171717]" />
-              {wishlistCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#171717] text-white text-[9px] font-bold flex items-center justify-center">
-                  {wishlistCount}
-                </span>
-              )}
-            </Link>
+            <motion.div whileTap={{ scale: 0.9 }}>
+              <Link
+                to="/wishlist"
+                className="relative p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors block"
+                title="Saved Items"
+                aria-label="Wishlist"
+              >
+                <Heart className="w-5 h-5" />
+                {wishlistCount > 0 && (
+                  <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-cyan-400 text-slate-950 text-[9px] font-black flex items-center justify-center shadow-xs">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
+            </motion.div>
 
             {/* Cart Button */}
-            <button
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               onClick={() => setIsCartOpen(true)}
-              className="relative p-2 rounded-lg text-[#171717] hover:bg-[#FAF9F6] transition-colors cursor-pointer"
+              className="relative p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
               title="Shopping Cart"
               aria-label="Cart"
             >
-              <ShoppingBag className="w-5 h-5 text-[#171717]" />
+              <ShoppingBag className="w-5 h-5" />
               {totalItemCount > 0 && (
-                <span className="absolute top-1 right-1 min-w-[1rem] h-4 px-1 rounded-full bg-[#171717] text-white text-[9px] font-bold flex items-center justify-center">
+                <span className="absolute top-1 right-1 min-w-[1rem] h-4 px-1 rounded-full bg-cyan-400 text-slate-950 text-[9px] font-black flex items-center justify-center shadow-xs">
                   {totalItemCount}
                 </span>
               )}
-            </button>
+            </motion.button>
 
             {/* Account Profile Link */}
-            <Link
-              to="/account"
-              className="p-2 rounded-lg text-[#171717] hover:bg-[#FAF9F6] transition-colors hidden sm:flex"
-              title="My Account"
-              aria-label="Account"
-            >
-              <User className="w-5 h-5 text-[#171717]" />
-            </Link>
+            <motion.div whileTap={{ scale: 0.9 }}>
+              <Link
+                to="/account"
+                className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors hidden sm:flex"
+                title="My Account"
+                aria-label="Account"
+              >
+                <User className="w-5 h-5" />
+              </Link>
+            </motion.div>
           </div>
         </div>
 

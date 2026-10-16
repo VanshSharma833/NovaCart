@@ -1,6 +1,16 @@
 import { Product } from '../types';
 
-export const products: Product[] = [
+export const getConsistentProductViews = (baseImageUrl: string): string[] => {
+  const cleanUrl = baseImageUrl.split('?')[0];
+  return [
+    `${cleanUrl}?auto=format&fit=crop&w=1000&q=85`,
+    `${cleanUrl}?auto=format&fit=crop&w=1000&q=85&crop=center&zoom=1.25`,
+    `${cleanUrl}?auto=format&fit=crop&w=1000&q=85&crop=top`,
+    `${cleanUrl}?auto=format&fit=crop&w=1000&q=85&crop=edges`,
+  ];
+};
+
+const rawProducts: Product[] = [
   // 1. Trending Sneakers
   {
     id: 'nike-af1-07',
@@ -934,3 +944,8 @@ export const products: Product[] = [
     sku: 'RHD-LIP-TRT',
   }
 ];
+
+export const products: Product[] = rawProducts.map((p) => ({
+  ...p,
+  images: getConsistentProductViews(p.image),
+}));

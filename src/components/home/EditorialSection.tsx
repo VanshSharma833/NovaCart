@@ -4,37 +4,37 @@ import { ArrowRight } from 'lucide-react';
 
 export const EditorialSection: React.FC = () => {
   return (
-    <section className="py-16 bg-[#FAF9F6] border-b border-[#E7E5E4] overflow-hidden">
+    <section className="py-16 bg-[#070A12] border-b border-white/10 overflow-hidden text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white rounded-2xl border border-[#E7E5E4] overflow-hidden p-6 sm:p-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-gradient-to-r from-[#0F162A] via-[#131D36] to-[#0A0E1C] rounded-2xl border border-white/10 overflow-hidden p-6 sm:p-10 shadow-2xl">
           {/* Left: Editorial Image */}
-          <div className="lg:col-span-6 relative aspect-[4/3] lg:aspect-auto lg:h-[460px] rounded-xl overflow-hidden bg-stone-100 border border-[#E7E5E4]">
+          <div className="lg:col-span-6 relative aspect-[4/3] lg:aspect-auto lg:h-[460px] rounded-xl overflow-hidden bg-slate-950 border border-white/15 shadow-xl">
             <img
               src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1000&q=80"
               alt="Editorial Haute Fashion Collection"
-              className="w-full h-full object-cover object-top hover:scale-102 transition-transform duration-700"
+              className="w-full h-full object-cover object-top hover:scale-104 transition-transform duration-700"
             />
           </div>
 
           {/* Right: Editorial Narrative */}
-          <div className="lg:col-span-6 space-y-6 lg:pl-6">
-            <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#737373]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#6554D9]" />
+          <div className="lg:col-span-6 space-y-6 lg:pl-6 text-left">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-cyan-400">
+              <span className="w-2 h-2 rounded-full bg-cyan-400" />
               <span>THE EDITORIAL LOOKBOOK</span>
             </div>
 
-            <h3 className="text-3xl sm:text-4xl font-black tracking-tight text-[#171717] leading-tight">
+            <h3 className="text-3xl sm:text-4xl font-black tracking-tight text-white leading-tight">
               Contemporary Aesthetics, Everyday Utility.
             </h3>
 
-            <p className="text-sm sm:text-base text-[#737373] leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
               We believe the modern wardrobe shouldn't compromise between immaculate tailoring and peak function. From French Terry heavyweights to Italian pebbled leather totes, discover pieces engineered to elevate your daily routine.
             </p>
 
-            <div className="pt-2 flex flex-wrap gap-3">
+            <div className="pt-2 flex flex-wrap gap-3.5">
               <Link
                 to="/shop?category=fashion"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg bg-[#171717] hover:bg-black text-white text-sm font-semibold transition-colors"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-white text-slate-950 text-sm font-bold shadow-lg hover:bg-slate-100 transition-all active:scale-95 cursor-pointer"
               >
                 <span>Explore The Collection</span>
                 <ArrowRight className="w-4 h-4" />
@@ -42,7 +42,7 @@ export const EditorialSection: React.FC = () => {
 
               <Link
                 to="/shop?category=accessories"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg bg-white border border-[#E7E5E4] hover:border-[#171717] text-[#171717] text-sm font-medium transition-colors"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-white/10 border border-white/20 hover:border-white/40 text-white text-sm font-semibold transition-all active:scale-95 cursor-pointer"
               >
                 <span>Shop Accessories</span>
               </Link>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   Heart,
   ShoppingBag,
@@ -171,14 +171,21 @@ export const ProductDetailsPage: React.FC = () => {
                 </div>
               )}
 
-              {/* Main Image Display */}
+              {/* Main Image Display with Motion Animation */}
               <div className="relative flex-1 aspect-square w-full rounded-xl bg-[#FAF9F6] border border-[#E7E5E4] overflow-hidden flex items-center justify-center p-6 select-none">
-                <img
-                  src={mainImgSrc || product.image}
-                  alt={product.name}
-                  onError={() => setMainImgSrc(PRODUCT_FALLBACK_IMAGE)}
-                  className="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 hover:scale-103"
-                />
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={selectedImgIndex}
+                    src={mainImgSrc || product.image}
+                    alt={product.name}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.05 }}
+                    transition={{ duration: 0.28, ease: 'easeOut' }}
+                    onError={() => setMainImgSrc(PRODUCT_FALLBACK_IMAGE)}
+                    className="w-full h-full object-contain mix-blend-multiply"
+                  />
+                </AnimatePresence>
 
                 {/* Badges */}
                 <div className="absolute top-4 left-4 flex flex-col gap-1.5 pointer-events-none">
