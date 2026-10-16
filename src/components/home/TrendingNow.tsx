@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { products } from '../../data/products';
 import { ProductCard } from '../product/ProductCard';
@@ -7,11 +8,40 @@ import { ProductCard } from '../product/ProductCard';
 export const TrendingNow: React.FC = () => {
   const trendingProducts = products.filter((p) => p.isTrending).slice(0, 5);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 26 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.45,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
+    },
+  };
+
   return (
     <section className="py-16 bg-[#070A12] border-b border-white/10 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="flex items-end justify-between mb-8 pb-4 border-b border-white/10">
+        {/* Section Header with Scroll Entrance */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="flex items-end justify-between mb-8 pb-4 border-b border-white/10"
+        >
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-cyan-400">
               POPULAR THIS WEEK • REAL-TIME DEMAND
@@ -23,19 +53,27 @@ export const TrendingNow: React.FC = () => {
 
           <Link
             to="/shop"
-            className="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors"
+            className="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors group"
           >
             <span>View All</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-        </div>
+        </motion.div>
 
-        {/* Clean Aligned Product Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
+        {/* Clean Aligned Product Grid with Staggered Scroll Entrance */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6"
+        >
           {trendingProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <motion.div key={product.id} variants={itemVariants} className="h-full">
+              <ProductCard product={product} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

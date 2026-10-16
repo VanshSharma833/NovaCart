@@ -14,10 +14,40 @@ export const BestSellers: React.FC = () => {
     return p.category === activeTab;
   }).slice(0, 8);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.07,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 26 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.45,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
+    },
+  };
+
   return (
     <section className="py-16 bg-[#070A12] border-b border-white/10 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-white/10 gap-4">
+        {/* Header & Filter Tabs with Scroll Entrance */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-white/10 gap-4"
+        >
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-cyan-400">
               SIGNATURE SELECTIONS • HIGH DEMAND
@@ -43,14 +73,23 @@ export const BestSellers: React.FC = () => {
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        {/* Product Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* Product Grid with Staggered Scroll Entrance */}
+        <motion.div
+          key={activeTab}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
+        >
           {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <motion.div key={product.id} variants={itemVariants} className="h-full">
+              <ProductCard product={product} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         <div className="mt-12 flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-white/10">
           <p className="text-xs text-slate-400">

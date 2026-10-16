@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { SlidersHorizontal, PackageX } from 'lucide-react';
 import { products } from '../../data/products';
 import { categories } from '../../data/categories';
@@ -230,11 +231,40 @@ export const ShopPage: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.05,
+                    },
+                  },
+                }}
+                className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6"
+              >
                 {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <motion.div
+                    key={product.id}
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.4,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                    className="h-full"
+                  >
+                    <ProductCard product={product} />
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             )}
           </main>
         </div>

@@ -1,15 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 
 export const PromoBanner: React.FC = () => {
   return (
-    <section className="py-16 bg-[#070A12] border-b border-white/10 text-white">
+    <section className="py-16 bg-[#070A12] border-b border-white/10 text-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Two Understated Promotional Banners */}
+        {/* Two Understated Promotional Banners with Scroll Reveal */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {/* Banner 1: Contemporary Fashion & Tailoring */}
-          <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0F162A] to-[#0A0E1C] border border-white/10 hover:border-white/25 p-8 sm:p-10 flex flex-col justify-between transition-all shadow-xl">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0F162A] to-[#0A0E1C] border border-white/10 hover:border-white/25 p-8 sm:p-10 flex flex-col justify-between transition-all shadow-xl"
+          >
             <div className="space-y-3 z-10 max-w-sm text-left">
               <span className="text-[11px] font-bold uppercase tracking-widest text-cyan-400">
                 EDITORIAL FEATURE
@@ -39,10 +46,16 @@ export const PromoBanner: React.FC = () => {
                 className="w-full h-full object-cover object-top group-hover:scale-104 transition-transform duration-700"
               />
             </div>
-          </div>
+          </motion.div>
 
           {/* Banner 2: Studio Audio & Precision Electronics */}
-          <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0F162A] to-[#0A0E1C] border border-white/10 hover:border-white/25 p-8 sm:p-10 flex flex-col justify-between transition-all shadow-xl">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+            className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0F162A] to-[#0A0E1C] border border-white/10 hover:border-white/25 p-8 sm:p-10 flex flex-col justify-between transition-all shadow-xl"
+          >
             <div className="space-y-3 z-10 max-w-sm text-left">
               <span className="text-[11px] font-bold uppercase tracking-widest text-cyan-400">
                 PRECISION HARDWARE
@@ -72,7 +85,7 @@ export const PromoBanner: React.FC = () => {
                 className="w-full h-full object-cover object-center group-hover:scale-104 transition-transform duration-700"
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -66,11 +66,41 @@ export const CategorySlider: React.FC = () => {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.07,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 26, scale: 0.96 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.45,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
+    },
+  };
+
   return (
     <section className="py-16 bg-[#070A12] border-b border-white/10 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="flex items-end justify-between mb-8 pb-4 border-b border-white/10">
+        {/* Section Header with Scroll Entrance */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="flex items-end justify-between mb-8 pb-4 border-b border-white/10"
+        >
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-cyan-400">
               DEPARTMENTS • EXPLORE BY SPHERE
@@ -82,21 +112,27 @@ export const CategorySlider: React.FC = () => {
 
           <Link
             to="/shop"
-            className="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors"
+            className="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors group"
           >
             <span>View All</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-        </div>
+        </motion.div>
 
-        {/* 6 Category Cards Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-6">
+        {/* 6 Category Cards Grid with Staggered Scroll Entrance */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-6"
+        >
           {sixCategories.map((cat) => (
             <motion.div
               key={cat.id}
+              variants={cardVariants}
               whileHover={{ y: -5, scale: 1.02 }}
               whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
             >
               <Link
                 to={`/shop?category=${cat.slug}`}
@@ -127,7 +163,7 @@ export const CategorySlider: React.FC = () => {
               </Link>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

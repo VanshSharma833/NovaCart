@@ -196,6 +196,35 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Animated Scroll Prompt Indicator */}
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.6 }}
+          className="hidden md:flex items-center justify-between pt-8 border-t border-white/5 text-slate-400 text-xs select-none"
+        >
+          <div className="flex items-center gap-2">
+            <motion.div
+              animate={{ y: [0, 5, 0] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              className="w-4 h-7 rounded-full border border-white/20 flex items-start justify-center p-1"
+            >
+              <div className="w-1 h-1.5 rounded-full bg-cyan-400" />
+            </motion.div>
+            <span className="text-[11px] font-semibold tracking-wider uppercase text-slate-400">
+              Scroll to explore catalog
+            </span>
+          </div>
+
+          <div className="flex items-center gap-6 text-[11px] text-slate-400">
+            <span>Direct Delivery Global</span>
+            <span>•</span>
+            <span>Carbon-Neutral Packaging</span>
+            <span>•</span>
+            <span>Guaranteed Authenticity</span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
