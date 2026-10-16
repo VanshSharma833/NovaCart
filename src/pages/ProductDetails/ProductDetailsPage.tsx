@@ -11,6 +11,8 @@ import {
   Share2,
   ChevronRight,
   AlertCircle,
+  Plus,
+  Sparkles,
 } from 'lucide-react';
 import { products } from '../../data/products';
 import { formatPrice } from '../../lib/formatPrice';
@@ -35,6 +37,8 @@ export const ProductDetailsPage: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const [mainImgSrc, setMainImgSrc] = useState<string>('');
   const [hasAdded, setHasAdded] = useState(false);
+  const [isWishlistHovered, setIsWishlistHovered] = useState(false);
+  const [isCartHovered, setIsCartHovered] = useState(false);
 
   const { addToCart, setIsCartOpen } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
@@ -346,7 +350,7 @@ export const ProductDetailsPage: React.FC = () => {
                     </button>
                   </div>
 
-                  {/* Wishlist Button */}
+                  {/* Wishlist Button with Hover Morph */}
                   <motion.button
                     whileTap={{ scale: 0.88 }}
                     onClick={() => {
@@ -356,29 +360,100 @@ export const ProductDetailsPage: React.FC = () => {
                         'info'
                       );
                     }}
-                    className={`p-3 rounded-lg border transition-colors cursor-pointer ${
+                    onMouseEnter={() => setIsWishlistHovered(true)}
+                    onMouseLeave={() => setIsWishlistHovered(false)}
+                    className={`p-3 rounded-lg border transition-all cursor-pointer overflow-hidden ${
                       isFavorited
-                        ? 'border-[#171717] bg-white text-rose-600'
+                        ? 'border-[#171717] bg-white text-rose-600 shadow-sm'
+                        : isWishlistHovered
+                        ? 'border-rose-400 bg-rose-50 text-rose-600 shadow-sm'
                         : 'border-[#E7E5E4] text-[#737373] hover:text-[#171717] hover:border-[#171717]'
                     }`}
                     title="Wishlist"
                     aria-label={isFavorited ? 'Remove from wishlist' : 'Save to wishlist'}
                   >
-                    <Heart className={`w-4 h-4 ${isFavorited ? 'fill-rose-600 text-rose-600' : ''}`} />
+                    <AnimatePresence mode="wait" initial={false}>
+                      {isFavorited || isWishlistHovered ? (
+                        <motion.div
+                          key="pdp-filled-heart"
+                          initial={{ scale: 0.7 }}
+                          animate={{ scale: [1, 1.25, 1.1] }}
+                          exit={{ scale: 0.7 }}
+                          transition={{ duration: 0.2 }}
+                          className="flex items-center justify-center"
+                        >
+                          <Heart className="w-4 h-4 fill-rose-600 text-rose-600" />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="pdp-outline-heart"
+                          initial={{ scale: 0.8 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 0.8 }}
+                          transition={{ duration: 0.15 }}
+                          className="flex items-center justify-center"
+                        >
+                          <Heart className="w-4 h-4" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.button>
 
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    disabled={!product.inStock}
-                    className={`flex-1 font-medium rounded-lg transition-colors ${
-                      hasAdded ? 'bg-emerald-600 hover:bg-emerald-600' : ''
-                    }`}
-                    onClick={handleAddToCart}
-                    leftIcon={hasAdded ? <Check className="w-4 h-4" /> : <ShoppingBag className="w-4 h-4" />}
+                  <div
+                    onMouseEnter={() => setIsCartHovered(true)}
+                    onMouseLeave={() => setIsCartHovered(false)}
+                    className="flex-1"
                   >
-                    {hasAdded ? 'Added to Cart' : product.inStock ? 'Add to Cart' : 'Out of Stock'}
-                  </Button>
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      disabled={!product.inStock}
+                      className={`w-full font-medium rounded-lg transition-colors ${
+                        hasAdded ? 'bg-emerald-600 hover:bg-emerald-600' : ''
+                      }`}
+                      onClick={handleAddToCart}
+                      leftIcon={
+                        <AnimatePresence mode="wait" initial={false}>
+                          {hasAdded ? (
+                            <motion.span
+                              key="pdp-added"
+                              initial={{ scale: 0.5, rotate: -45 }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              exit={{ scale: 0.5 }}
+                              transition={{ duration: 0.15 }}
+                              className="flex items-center justify-center"
+                            >
+                              <Check className="w-4 h-4" />
+                            </motion.span>
+                          ) : isCartHovered ? (
+                            <motion.span
+                              key="pdp-plus"
+                              initial={{ scale: 0.5, rotate: 90 }}
+                              animate={{ scale: 1.15, rotate: 0 }}
+                              exit={{ scale: 0.5, rotate: -90 }}
+                              transition={{ duration: 0.16 }}
+                              className="flex items-center justify-center text-cyan-400"
+                            >
+                              <Plus className="w-4 h-4 stroke-[2.8]" />
+                            </motion.span>
+                          ) : (
+                            <motion.span
+                              key="pdp-bag"
+                              initial={{ scale: 0.7 }}
+                              animate={{ scale: 1 }}
+                              exit={{ scale: 0.7 }}
+                              transition={{ duration: 0.15 }}
+                              className="flex items-center justify-center"
+                            >
+                              <ShoppingBag className="w-4 h-4" />
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+                      }
+                    >
+                      {hasAdded ? 'Added to Cart' : product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                    </Button>
+                  </div>
                 </div>
 
                 <Button

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, ShoppingBag, Eye, Star, Check, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { Heart, ShoppingBag, Eye, Star, Check, ChevronLeft, ChevronRight, Sparkles, Plus, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Product } from '../../types';
 import { formatPrice } from '../../lib/formatPrice';
 import { useCart } from '../../context/CartContext';
@@ -21,6 +21,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
   const [isHovered, setIsHovered] = useState(false);
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
   const [hasAdded, setHasAdded] = useState(false);
+
+  // Icon cursor hover states
+  const [isWishlistHovered, setIsWishlistHovered] = useState(false);
+  const [isQuickViewHovered, setIsQuickViewHovered] = useState(false);
+  const [isCartHovered, setIsCartHovered] = useState(false);
+  const [isPrevHovered, setIsPrevHovered] = useState(false);
+  const [isNextHovered, setIsNextHovered] = useState(false);
+  const [isStarHovered, setIsStarHovered] = useState(false);
 
   const availableImages = product.images && product.images.length > 0
     ? product.images
@@ -159,42 +167,114 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
             </div>
           )}
 
-          {/* Animated Wishlist Heart Toggle */}
+          {/* Animated Wishlist Heart Toggle with Hover Morph */}
           <motion.button
             whileTap={{ scale: 0.82 }}
             onClick={handleWishlist}
+            onMouseEnter={() => setIsWishlistHovered(true)}
+            onMouseLeave={() => setIsWishlistHovered(false)}
             aria-label={isFavorited ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
-            className={`absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full flex items-center justify-center border transition-all cursor-pointer ${
+            className={`absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full flex items-center justify-center border transition-all cursor-pointer overflow-hidden ${
               isFavorited
                 ? 'bg-white border-white text-rose-600 shadow-md'
+                : isWishlistHovered
+                ? 'bg-[#151D33] border-rose-500/60 text-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.4)]'
                 : 'bg-[#0E1424]/90 border-white/20 text-slate-300 hover:text-white hover:border-white/40'
             }`}
           >
-            <Heart
-              className={`w-3.5 h-3.5 transition-transform ${
-                isFavorited ? 'fill-rose-600 text-rose-600' : ''
-              }`}
-            />
+            <AnimatePresence mode="wait" initial={false}>
+              {isFavorited || isWishlistHovered ? (
+                <motion.div
+                  key="filled-heart"
+                  initial={{ scale: 0.7 }}
+                  animate={{ scale: [1, 1.25, 1.1] }}
+                  exit={{ scale: 0.7 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex items-center justify-center"
+                >
+                  <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500 drop-shadow-[0_0_6px_rgba(244,63,94,0.6)]" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="outline-heart"
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0.8 }}
+                  transition={{ duration: 0.15 }}
+                  className="flex items-center justify-center"
+                >
+                  <Heart className="w-3.5 h-3.5" />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.button>
 
-          {/* Angle Switcher Controls (Prev / Next Arrows on Hover) */}
+          {/* Angle Switcher Controls (Prev / Next Arrows with Hover Icon Change) */}
           {availableImages.length > 1 && (
             <>
               <button
                 type="button"
                 onClick={handlePrevImage}
+                onMouseEnter={() => setIsPrevHovered(true)}
+                onMouseLeave={() => setIsPrevHovered(false)}
                 aria-label="Previous angle"
-                className="absolute left-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[#0E1424]/90 hover:bg-white text-white hover:text-slate-950 border border-white/20 shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                className="absolute left-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[#0E1424]/90 hover:bg-cyan-400 text-white hover:text-slate-950 border border-white/20 hover:border-cyan-400 shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer overflow-hidden"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <AnimatePresence mode="wait" initial={false}>
+                  {isPrevHovered ? (
+                    <motion.div
+                      key="arrow-left"
+                      initial={{ x: 4, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: -4, opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="chevron-left"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </button>
               <button
                 type="button"
                 onClick={handleNextImage}
+                onMouseEnter={() => setIsNextHovered(true)}
+                onMouseLeave={() => setIsNextHovered(false)}
                 aria-label="Next angle"
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[#0E1424]/90 hover:bg-white text-white hover:text-slate-950 border border-white/20 shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[#0E1424]/90 hover:bg-cyan-400 text-white hover:text-slate-950 border border-white/20 hover:border-cyan-400 shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer overflow-hidden"
               >
-                <ChevronRight className="w-4 h-4" />
+                <AnimatePresence mode="wait" initial={false}>
+                  {isNextHovered ? (
+                    <motion.div
+                      key="arrow-right"
+                      initial={{ x: -4, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: 4, opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="chevron-right"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </button>
             </>
           )}
@@ -220,25 +300,92 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
             </div>
           )}
 
-          {/* Quick Action Overlay (Desktop Hover) */}
+          {/* Quick Action Overlay (Desktop Hover) with Icon Changes */}
           <div className="absolute inset-x-2.5 bottom-10 z-10 hidden sm:flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <button
               onClick={handleQuickView}
-              className="flex-1 py-1.5 px-2.5 rounded-xl bg-[#0E1424]/95 hover:bg-white text-white hover:text-slate-950 text-xs font-semibold shadow-md flex items-center justify-center gap-1.5 border border-white/20 hover:border-white transition-all cursor-pointer"
+              onMouseEnter={() => setIsQuickViewHovered(true)}
+              onMouseLeave={() => setIsQuickViewHovered(false)}
+              className="flex-1 py-1.5 px-2.5 rounded-xl bg-[#0E1424]/95 hover:bg-white text-white hover:text-slate-950 text-xs font-semibold shadow-md flex items-center justify-center gap-1.5 border border-white/20 hover:border-white transition-all cursor-pointer group/quickview"
             >
-              <Eye className="w-3.5 h-3.5" />
+              <AnimatePresence mode="wait" initial={false}>
+                {isQuickViewHovered ? (
+                  <motion.span
+                    key="sparkle-icon"
+                    initial={{ scale: 0.5, rotate: -45, opacity: 0 }}
+                    animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                    exit={{ scale: 0.5, rotate: 45, opacity: 0 }}
+                    transition={{ duration: 0.16 }}
+                    className="flex items-center justify-center text-cyan-600"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 fill-cyan-500" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="eye-icon"
+                    initial={{ scale: 0.7, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.7, opacity: 0 }}
+                    transition={{ duration: 0.16 }}
+                    className="flex items-center justify-center"
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
               <span>Quick View</span>
             </button>
             <motion.button
               whileTap={{ scale: 0.94 }}
               onClick={handleAddToCart}
-              className={`w-8 h-8 rounded-xl shadow-md flex items-center justify-center shrink-0 transition-colors cursor-pointer ${
-                hasAdded ? 'bg-emerald-500 text-white' : 'bg-white text-slate-950 hover:bg-slate-100 font-bold'
+              onMouseEnter={() => setIsCartHovered(true)}
+              onMouseLeave={() => setIsCartHovered(false)}
+              className={`w-8 h-8 rounded-xl shadow-md flex items-center justify-center shrink-0 transition-all cursor-pointer overflow-hidden ${
+                hasAdded
+                  ? 'bg-emerald-500 text-white'
+                  : isCartHovered
+                  ? 'bg-cyan-400 text-slate-950 font-black shadow-[0_0_12px_rgba(34,211,238,0.6)]'
+                  : 'bg-white text-slate-950 hover:bg-slate-100 font-bold'
               }`}
               title={hasAdded ? 'Added to cart' : 'Add to cart'}
               aria-label="Add to cart"
             >
-              {hasAdded ? <Check className="w-3.5 h-3.5" /> : <ShoppingBag className="w-3.5 h-3.5" />}
+              <AnimatePresence mode="wait" initial={false}>
+                {hasAdded ? (
+                  <motion.span
+                    key="cart-check"
+                    initial={{ scale: 0.4, rotate: -45 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    exit={{ scale: 0.4 }}
+                    transition={{ duration: 0.18 }}
+                    className="flex items-center justify-center"
+                  >
+                    <Check className="w-3.5 h-3.5 stroke-[2.8]" />
+                  </motion.span>
+                ) : isCartHovered ? (
+                  <motion.span
+                    key="cart-plus"
+                    initial={{ scale: 0.4, rotate: 90 }}
+                    animate={{ scale: 1.15, rotate: 0 }}
+                    exit={{ scale: 0.4, rotate: -90 }}
+                    transition={{ duration: 0.18, type: 'spring', stiffness: 350, damping: 18 }}
+                    className="flex items-center justify-center"
+                  >
+                    <Plus className="w-4 h-4 stroke-[2.8]" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="cart-bag"
+                    initial={{ scale: 0.7 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0.7 }}
+                    transition={{ duration: 0.15 }}
+                    className="flex items-center justify-center"
+                  >
+                    <ShoppingBag className="w-3.5 h-3.5" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </motion.button>
           </div>
         </div>
@@ -261,10 +408,34 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
               {product.name}
             </Link>
 
-            {/* Rating Stars */}
-            <div className="mt-1.5 flex items-center gap-1.5 text-[11px] h-4">
-              <Star className="w-3 h-3 fill-amber-400 text-amber-400 shrink-0" />
-              <span className="font-bold text-white">{product.rating.toFixed(1)}</span>
+            {/* Rating Stars with Hover Sparkle Morph */}
+            <div
+              onMouseEnter={() => setIsStarHovered(true)}
+              onMouseLeave={() => setIsStarHovered(false)}
+              className="mt-1.5 flex items-center gap-1.5 text-[11px] h-4 cursor-pointer select-none group/star w-max"
+              title={`${product.rating.toFixed(1)} stars`}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {isStarHovered ? (
+                  <motion.span
+                    key="star-sparkle"
+                    initial={{ scale: 0.6, rotate: -60 }}
+                    animate={{ scale: [1, 1.25, 1.15], rotate: [0, 15, 0] }}
+                    exit={{ scale: 0.6 }}
+                    transition={{ duration: 0.22 }}
+                    className="flex items-center justify-center text-amber-300 drop-shadow-[0_0_8px_rgba(251,191,36,0.9)]"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                  </motion.span>
+                ) : (
+                  <motion.span key="star-default" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
+                    <Star className="w-3 h-3 fill-amber-400 text-amber-400 shrink-0" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+              <span className={`font-bold transition-colors ${isStarHovered ? 'text-amber-300' : 'text-white'}`}>
+                {product.rating.toFixed(1)}
+              </span>
             </div>
 
             {/* Color Swatch Dots */}
@@ -314,19 +485,58 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
               )}
             </div>
 
-            {/* Mobile quick add button */}
+            {/* Mobile quick add button with hover icon morph */}
             <motion.button
               whileTap={{ scale: 0.92 }}
               onClick={handleAddToCart}
-              className={`sm:hidden p-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
+              onMouseEnter={() => setIsCartHovered(true)}
+              onMouseLeave={() => setIsCartHovered(false)}
+              className={`sm:hidden p-1.5 rounded-lg border text-xs font-medium transition-all cursor-pointer overflow-hidden ${
                 hasAdded
                   ? 'bg-emerald-600 text-white border-emerald-600'
+                  : isCartHovered
+                  ? 'bg-cyan-400 text-slate-950 border-cyan-400 font-bold shadow-[0_0_10px_rgba(34,211,238,0.5)]'
                   : 'bg-[#131A2E] border-white/15 text-white hover:bg-white hover:text-slate-950'
               }`}
               title={hasAdded ? 'Added' : 'Add to cart'}
               aria-label="Add to cart"
             >
-              {hasAdded ? <Check className="w-3.5 h-3.5" /> : <ShoppingBag className="w-3.5 h-3.5" />}
+              <AnimatePresence mode="wait" initial={false}>
+                {hasAdded ? (
+                  <motion.span
+                    key="mobile-check"
+                    initial={{ scale: 0.5, rotate: -45 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    exit={{ scale: 0.5 }}
+                    transition={{ duration: 0.15 }}
+                    className="flex items-center justify-center"
+                  >
+                    <Check className="w-3.5 h-3.5 stroke-[2.8]" />
+                  </motion.span>
+                ) : isCartHovered ? (
+                  <motion.span
+                    key="mobile-plus"
+                    initial={{ scale: 0.5, rotate: 90 }}
+                    animate={{ scale: 1.15, rotate: 0 }}
+                    exit={{ scale: 0.5, rotate: -90 }}
+                    transition={{ duration: 0.15 }}
+                    className="flex items-center justify-center"
+                  >
+                    <Plus className="w-3.5 h-3.5 stroke-[2.8]" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="mobile-bag"
+                    initial={{ scale: 0.7 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0.7 }}
+                    transition={{ duration: 0.15 }}
+                    className="flex items-center justify-center"
+                  >
+                    <ShoppingBag className="w-3.5 h-3.5" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </motion.button>
           </div>
         </div>
