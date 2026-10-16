@@ -10,6 +10,8 @@ import {
   Banknote,
   Edit2,
   Package,
+  Loader2,
+  AlertCircle,
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { formatPrice } from '../../lib/formatPrice';
@@ -29,6 +31,7 @@ export const CheckoutPage: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState<'UPI' | 'Card' | 'COD'>('UPI');
   const [upiId, setUpiId] = useState('demo@upi');
   const [confirmedOrderId, setConfirmedOrderId] = useState('NC720458');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Shipping Form State
   const [address, setAddress] = useState({
@@ -40,19 +43,58 @@ export const CheckoutPage: React.FC = () => {
     postalCode: '110016',
   });
 
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [isEditingAddress, setIsEditingAddress] = useState(false);
+
+  const validateAddress = () => {
+    const errors: Record<string, string> = {};
+    if (!address.fullName.trim()) errors.fullName = 'Full name is required';
+    if (!address.phone.trim()) {
+      errors.phone = 'Phone number is required';
+    } else if (address.phone.replace(/\D/g, '').length < 10) {
+      errors.phone = 'Please enter a valid 10-digit phone number';
+    }
+    if (!address.street.trim()) errors.street = 'Street address is required';
+    if (!address.city.trim()) errors.city = 'City is required';
+    if (!address.postalCode.trim()) {
+      errors.postalCode = 'PIN / Postal code is required';
+    } else if (address.postalCode.trim().length < 5) {
+      errors.postalCode = 'Please enter a valid postal code';
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleProceedToPayment = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateAddress()) {
+      showToast('Please fix the shipping address errors', 'error');
+      setIsEditingAddress(true);
+      return;
+    }
+    setIsEditingAddress(false);
     setStep('payment');
   };
 
   const handleCompleteOrder = () => {
-    const newOrderId = generateOrderId();
-    setConfirmedOrderId(newOrderId);
-    setStep('confirmed');
-    clearCart();
-    showToast(`Order #${newOrderId} confirmed!`, 'success');
+    if (isSubmitting) return;
+
+    if (paymentMethod === 'UPI' && !upiId.trim()) {
+      showToast('Please enter a valid UPI ID (e.g. yourname@upi)', 'error');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // Simulate safe order placement processing
+    setTimeout(() => {
+      const newOrderId = generateOrderId();
+      setConfirmedOrderId(newOrderId);
+      setStep('confirmed');
+      clearCart();
+      setIsSubmitting(false);
+      showToast(`Order #${newOrderId} simulation created!`, 'success');
+    }, 700);
   };
 
   // If cart is empty and not confirmed, redirect
@@ -60,8 +102,8 @@ export const CheckoutPage: React.FC = () => {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto">
         <Package className="w-12 h-12 text-[#737373] mb-4 stroke-1" />
-        <h2 className="text-xl font-medium tracking-tight text-[#171717]">No items to checkout</h2>
-        <p className="text-xs text-[#737373] mt-1">Please add items to your cart before proceeding.</p>
+        <h2 className="text-xl font-medium tracking-tight text-[#171717]">No items in cart</h2>
+        <p className="text-xs text-[#737373] mt-1">Please add items to your cart before proceeding to checkout.</p>
         <Link to="/shop" className="mt-6">
           <Button variant="primary">Return to Shop</Button>
         </Link>
@@ -73,7 +115,7 @@ export const CheckoutPage: React.FC = () => {
   if (step === 'confirmed') {
     return (
       <div className="min-h-[75vh] flex items-center justify-center py-16 px-4 bg-[#FAF9F6]">
-        <div className="max-w-lg w-full bg-white rounded-2xl border border-[#E7E5E4] p-8 sm:p-12 text-center space-y-6">
+        <div className="max-w-lg w-full bg-white rounded-2xl border border-[#E7E5E4] p-8 sm:p-12 text-center space-y-6 shadow-2xs">
           {/* Subtle Green Checkmark */}
           <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto border border-emerald-100">
             <CheckCircle2 className="w-9 h-9" />
@@ -82,13 +124,13 @@ export const CheckoutPage: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FAF9F6] border border-[#E7E5E4] text-[10px] font-medium uppercase tracking-widest text-[#737373] mb-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#6554D9]" />
-              Order Placed
+              Demo Order Simulated
             </div>
             <h1 className="text-2xl sm:text-3xl font-medium text-[#171717] tracking-tight">
-              Thank you for your order
+              Order Receipt Generated
             </h1>
             <p className="text-[#737373] text-xs sm:text-sm mt-2">
-              Order confirmation <strong className="text-[#171717] font-mono">#{confirmedOrderId}</strong> has been generated.
+              Reference code <strong className="text-[#171717] font-mono">#{confirmedOrderId}</strong>
             </p>
           </div>
 
@@ -102,13 +144,16 @@ export const CheckoutPage: React.FC = () => {
               <span className="font-medium text-[#171717] truncate max-w-xs">{address.street}, {address.city}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#737373]">Payment Status:</span>
-              <span className="font-medium text-emerald-600">Simulated / Demo Paid</span>
+              <span className="text-[#737373]">Payment Simulation:</span>
+              <span className="font-medium text-emerald-600">{paymentMethod} (Demo Mode)</span>
             </div>
           </div>
 
-          <div className="p-3 bg-[#FAF9F6] rounded-xl border border-[#E7E5E4] text-[11px] text-[#737373] text-left">
-            <strong className="text-[#171717]">Note:</strong> This is a frontend demo sandbox. No real monetary transactions or deliveries were initiated.
+          <div className="p-3 bg-[#FAF9F6] rounded-xl border border-[#E7E5E4] text-[11px] text-[#737373] text-left flex items-start gap-2">
+            <ShieldCheck className="w-4 h-4 text-[#737373] shrink-0 mt-0.5" />
+            <div>
+              <strong className="text-[#171717]">College Hackathon Demo:</strong> This interface demonstrates a full frontend checkout cycle without processing actual currency.
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3 pt-2">
@@ -176,53 +221,73 @@ export const CheckoutPage: React.FC = () => {
         {/* Checkout Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Main Checkout Form Column */}
-          <div className="lg:col-span-7 bg-white rounded-2xl border border-[#E7E5E4] p-6 sm:p-8 space-y-6">
+          <div className="lg:col-span-7 bg-white rounded-2xl border border-[#E7E5E4] p-6 sm:p-8 space-y-6 shadow-2xs">
             {step === 'shipping' && (
               <form onSubmit={handleProceedToPayment} className="space-y-6">
                 <div className="flex items-center justify-between pb-4 border-b border-[#E7E5E4]">
-                  <h2 className="text-base font-semibold text-[#171717]">Shipping Address</h2>
+                  <h2 className="text-base font-semibold text-[#171717]">Shipping Details</h2>
                   <button
                     type="button"
                     onClick={() => setIsEditingAddress(!isEditingAddress)}
-                    className="text-xs text-[#171717] hover:text-[#6554D9] font-medium flex items-center gap-1 transition-colors"
+                    className="text-xs text-[#171717] hover:text-[#6554D9] font-medium flex items-center gap-1 transition-colors cursor-pointer"
                   >
                     <Edit2 className="w-3.5 h-3.5" />
-                    <span>{isEditingAddress ? 'Done' : 'Edit'}</span>
+                    <span>{isEditingAddress ? 'Done' : 'Change Address'}</span>
                   </button>
                 </div>
 
                 {isEditingAddress ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Input
-                      label="Full Name"
+                      label="Full Name *"
                       value={address.fullName}
-                      onChange={(e) => setAddress({ ...address, fullName: e.target.value })}
+                      error={formErrors.fullName}
+                      onChange={(e) => {
+                        setAddress({ ...address, fullName: e.target.value });
+                        if (formErrors.fullName) setFormErrors({ ...formErrors, fullName: '' });
+                      }}
                       required
                     />
                     <Input
-                      label="Mobile Phone"
+                      label="Mobile Phone *"
                       value={address.phone}
-                      onChange={(e) => setAddress({ ...address, phone: e.target.value })}
+                      error={formErrors.phone}
+                      onChange={(e) => {
+                        setAddress({ ...address, phone: e.target.value });
+                        if (formErrors.phone) setFormErrors({ ...formErrors, phone: '' });
+                      }}
                       required
                     />
                     <div className="sm:col-span-2">
                       <Input
-                        label="Street Address / Area"
+                        label="Street Address / Area *"
                         value={address.street}
-                        onChange={(e) => setAddress({ ...address, street: e.target.value })}
+                        error={formErrors.street}
+                        onChange={(e) => {
+                          setAddress({ ...address, street: e.target.value });
+                          if (formErrors.street) setFormErrors({ ...formErrors, street: '' });
+                        }}
                         required
                       />
                     </div>
                     <Input
-                      label="City"
+                      label="City *"
                       value={address.city}
-                      onChange={(e) => setAddress({ ...address, city: e.target.value })}
+                      error={formErrors.city}
+                      onChange={(e) => {
+                        setAddress({ ...address, city: e.target.value });
+                        if (formErrors.city) setFormErrors({ ...formErrors, city: '' });
+                      }}
                       required
                     />
                     <Input
-                      label="Postal Code (PIN)"
+                      label="Postal Code (PIN) *"
                       value={address.postalCode}
-                      onChange={(e) => setAddress({ ...address, postalCode: e.target.value })}
+                      error={formErrors.postalCode}
+                      onChange={(e) => {
+                        setAddress({ ...address, postalCode: e.target.value });
+                        if (formErrors.postalCode) setFormErrors({ ...formErrors, postalCode: '' });
+                      }}
                       required
                     />
                   </div>
@@ -254,7 +319,7 @@ export const CheckoutPage: React.FC = () => {
                   <h2 className="text-base font-semibold text-[#171717]">Select Payment Method</h2>
                   <button
                     onClick={() => setStep('shipping')}
-                    className="text-xs text-[#737373] hover:text-[#171717] underline font-medium transition-colors"
+                    className="text-xs text-[#737373] hover:text-[#171717] underline font-medium transition-colors cursor-pointer"
                   >
                     Back to Address
                   </button>
@@ -349,23 +414,25 @@ export const CheckoutPage: React.FC = () => {
                 </div>
 
                 <div className="p-3 bg-[#FAF9F6] rounded-xl border border-[#E7E5E4] text-xs text-[#737373]">
-                  ⚡ <strong className="text-[#171717]">Demo Sandbox Mode:</strong> Clicking &quot;Place Order&quot; will simulate order authorization and generate an official receipt.
+                  ⚡ <strong className="text-[#171717]">Demo Sandbox Mode:</strong> Clicking &quot;Place Order&quot; creates an instant simulated order confirmation with receipt.
                 </div>
 
                 <Button
                   variant="primary"
                   size="lg"
+                  disabled={isSubmitting}
                   className="w-full font-medium"
                   onClick={handleCompleteOrder}
+                  leftIcon={isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : undefined}
                 >
-                  Place Order ({formatPrice(finalTotal)})
+                  {isSubmitting ? 'Authorizing Order...' : `Place Order (${formatPrice(finalTotal)})`}
                 </Button>
               </div>
             )}
           </div>
 
           {/* Right Order Review Column */}
-          <div className="lg:col-span-5 bg-white rounded-2xl border border-[#E7E5E4] p-6 sm:p-8 space-y-6">
+          <div className="lg:col-span-5 bg-white rounded-2xl border border-[#E7E5E4] p-6 sm:p-8 space-y-6 shadow-2xs">
             <h3 className="text-base font-semibold text-[#171717] pb-3 border-b border-[#E7E5E4]">
               Order Summary ({items.length} items)
             </h3>
@@ -411,7 +478,7 @@ export const CheckoutPage: React.FC = () => {
             </div>
 
             <div className="pt-2 flex items-center justify-center gap-2 text-xs text-[#737373]">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <ShieldCheck className="w-4 h-4 text-emerald-600 stroke-1" />
               <span>Safe & Secure 256-Bit Encryption</span>
             </div>
           </div>

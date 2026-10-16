@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { motion } from 'motion/react';
 import {
   Heart,
   ShoppingBag,
@@ -9,6 +10,7 @@ import {
   Check,
   Share2,
   ChevronRight,
+  AlertCircle,
 } from 'lucide-react';
 import { products } from '../../data/products';
 import { formatPrice } from '../../lib/formatPrice';
@@ -19,6 +21,7 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { RatingStars } from '../../components/ui/RatingStars';
 import { ProductCard } from '../../components/product/ProductCard';
+import { PRODUCT_FALLBACK_IMAGE } from '../../lib/helpers';
 
 export const ProductDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,6 +33,8 @@ export const ProductDetailsPage: React.FC = () => {
   const [selectedColor, setSelectedColor] = useState<string | undefined>(undefined);
   const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
   const [quantity, setQuantity] = useState(1);
+  const [mainImgSrc, setMainImgSrc] = useState<string>('');
+  const [hasAdded, setHasAdded] = useState(false);
 
   const { addToCart, setIsCartOpen } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
@@ -39,6 +44,7 @@ export const ProductDetailsPage: React.FC = () => {
     window.scrollTo(0, 0);
     if (product) {
       setSelectedImgIndex(0);
+      setMainImgSrc(product.image);
       setSelectedColor(product.colors && product.colors.length > 0 ? product.colors[0].name : undefined);
       setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0] : undefined);
       setQuantity(1);
@@ -49,7 +55,9 @@ export const ProductDetailsPage: React.FC = () => {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center bg-[#FAF9F6]">
         <h2 className="text-2xl font-bold text-[#171717]">Product Not Found</h2>
-        <p className="text-[#737373] mt-2">The product you are looking for might have been moved or discontinued.</p>
+        <p className="text-[#737373] mt-2 text-xs sm:text-sm">
+          The product you are looking for might have been moved or discontinued.
+        </p>
         <Link to="/shop" className="mt-6">
           <Button variant="primary">Return to Shop</Button>
         </Link>
@@ -65,10 +73,21 @@ export const ProductDetailsPage: React.FC = () => {
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
 
+  const handleSelectThumbnail = (index: number, src: string) => {
+    setSelectedImgIndex(index);
+    setMainImgSrc(src);
+  };
+
   const handleAddToCart = () => {
+    if (!product.inStock) {
+      showToast('This item is currently out of stock', 'error');
+      return;
+    }
     addToCart(product, quantity, selectedColor, selectedSize);
+    setHasAdded(true);
+    setTimeout(() => setHasAdded(false), 1400);
     showToast(
-      `Added ${quantity}x ${product.name} to cart!`,
+      `Added ${quantity}x ${product.name} to cart`,
       'success',
       'View Cart',
       () => setIsCartOpen(true)
@@ -76,6 +95,10 @@ export const ProductDetailsPage: React.FC = () => {
   };
 
   const handleBuyNow = () => {
+    if (!product.inStock) {
+      showToast('This item is currently out of stock', 'error');
+      return;
+    }
     addToCart(product, quantity, selectedColor, selectedSize);
     navigate('/checkout');
   };
@@ -86,7 +109,7 @@ export const ProductDetailsPage: React.FC = () => {
         title: product.name,
         text: `Check out ${product.name} on NovaCart!`,
         url: window.location.href,
-      });
+      }).catch(() => {});
     } else {
       navigator.clipboard.writeText(window.location.href);
       showToast('Product link copied to clipboard!');
@@ -96,8 +119,8 @@ export const ProductDetailsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FAF9F6] pb-20 pt-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-xs text-[#737373] mb-6 flex-wrap">
+        {/* Breadcrumb Navigation */}
+        <nav className="flex items-center gap-2 text-xs text-[#737373] mb-6 flex-wrap" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-[#171717] transition-colors">
             Home
           </Link>
@@ -113,11 +136,11 @@ export const ProductDetailsPage: React.FC = () => {
             {product.category}
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-[#E7E5E4]" />
-          <span className="font-semibold text-[#171717] truncate max-w-xs">{product.name}</span>
+          <span className="font-medium text-[#171717] truncate max-w-xs">{product.name}</span>
         </nav>
 
         {/* Main Product Section */}
-        <div className="bg-white rounded-2xl border border-[#E7E5E4] p-6 sm:p-10">
+        <div className="bg-white rounded-2xl border border-[#E7E5E4] p-6 sm:p-10 shadow-2xs">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             {/* Gallery Column (Left) */}
             <div className="lg:col-span-7 flex flex-col-reverse sm:flex-row gap-4 items-start">
@@ -127,29 +150,38 @@ export const ProductDetailsPage: React.FC = () => {
                   {gallery.map((img, idx) => (
                     <button
                       key={idx}
-                      onClick={() => setSelectedImgIndex(idx)}
-                      className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl border overflow-hidden shrink-0 transition-all ${
+                      onClick={() => handleSelectThumbnail(idx, img)}
+                      className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl border overflow-hidden shrink-0 transition-all cursor-pointer ${
                         selectedImgIndex === idx
                           ? 'border-[#171717] ring-1 ring-[#171717]'
                           : 'border-[#E7E5E4] hover:border-neutral-400 bg-[#FAF9F6]'
                       }`}
+                      aria-label={`View photo ${idx + 1}`}
                     >
-                      <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
+                      <img
+                        src={img}
+                        alt={`${product.name} thumbnail ${idx + 1}`}
+                        onError={(e) => {
+                          e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
+                        }}
+                        className="w-full h-full object-cover"
+                      />
                     </button>
                   ))}
                 </div>
               )}
 
               {/* Main Image Display */}
-              <div className="relative flex-1 aspect-square w-full rounded-xl bg-[#FAF9F6] border border-[#E7E5E4] overflow-hidden flex items-center justify-center p-6">
+              <div className="relative flex-1 aspect-square w-full rounded-xl bg-[#FAF9F6] border border-[#E7E5E4] overflow-hidden flex items-center justify-center p-6 select-none">
                 <img
-                  src={gallery[selectedImgIndex] || product.image}
+                  src={mainImgSrc || product.image}
                   alt={product.name}
+                  onError={() => setMainImgSrc(PRODUCT_FALLBACK_IMAGE)}
                   className="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 hover:scale-103"
                 />
 
                 {/* Badges */}
-                <div className="absolute top-4 left-4 flex flex-col gap-1.5">
+                <div className="absolute top-4 left-4 flex flex-col gap-1.5 pointer-events-none">
                   {product.discount > 0 && <Badge variant="discount">{product.discount}% OFF</Badge>}
                   {product.isNewArrival && (
                     <span className="bg-[#171717] text-white text-[9px] font-bold px-2 py-0.5 rounded tracking-wider uppercase">
@@ -161,8 +193,9 @@ export const ProductDetailsPage: React.FC = () => {
                 {/* Share Button */}
                 <button
                   onClick={handleShare}
-                  className="absolute top-4 right-4 p-2 rounded-lg bg-white/90 hover:bg-white text-[#737373] hover:text-[#171717] border border-[#E7E5E4] transition-colors"
+                  className="absolute top-4 right-4 p-2 rounded-lg bg-white/90 hover:bg-white text-[#737373] hover:text-[#171717] border border-[#E7E5E4] transition-colors cursor-pointer"
                   title="Share product"
+                  aria-label="Share product link"
                 >
                   <Share2 className="w-4 h-4" />
                 </button>
@@ -181,7 +214,7 @@ export const ProductDetailsPage: React.FC = () => {
                   )}
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl font-black text-[#171717] tracking-tight">
+                <h1 className="text-2xl sm:text-3xl font-medium text-[#171717] tracking-tight">
                   {product.name}
                 </h1>
 
@@ -189,15 +222,21 @@ export const ProductDetailsPage: React.FC = () => {
                 <div className="mt-3 flex items-center gap-3">
                   <RatingStars rating={product.rating} reviewCount={product.reviewCount} />
                   <span className="text-xs text-[#E7E5E4]">•</span>
-                  <span className="text-xs font-semibold text-emerald-700 flex items-center gap-1">
-                    <Check className="w-3.5 h-3.5 text-emerald-600" /> In Stock & Ready to Ship
-                  </span>
+                  {product.inStock ? (
+                    <span className="text-xs font-medium text-emerald-700 flex items-center gap-1">
+                      <Check className="w-3.5 h-3.5 text-emerald-600" /> In Stock & Ready to Ship
+                    </span>
+                  ) : (
+                    <span className="text-xs font-medium text-amber-700 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5 text-amber-600" /> Currently Out of Stock
+                    </span>
+                  )}
                 </div>
               </div>
 
               {/* Price Row */}
               <div className="flex items-baseline gap-3 pt-2 border-t border-[#E7E5E4]">
-                <span className="text-3xl sm:text-4xl font-black text-[#171717]">
+                <span className="text-3xl sm:text-4xl font-semibold text-[#171717]">
                   {formatPrice(product.price)}
                 </span>
                 {product.originalPrice > product.price && (
@@ -210,7 +249,7 @@ export const ProductDetailsPage: React.FC = () => {
                 )}
               </div>
 
-              {/* Short description */}
+              {/* Description */}
               <p className="text-xs sm:text-sm text-[#737373] leading-relaxed">
                 {product.description}
               </p>
@@ -218,8 +257,8 @@ export const ProductDetailsPage: React.FC = () => {
               {/* Color Selection */}
               {product.colors && product.colors.length > 0 && (
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-[#171717] block mb-2">
-                    Color: <span className="font-semibold text-[#737373]">{selectedColor}</span>
+                  <label className="text-xs font-semibold uppercase tracking-wider text-[#171717] block mb-2">
+                    Color: <span className="font-normal text-[#737373]">{selectedColor}</span>
                   </label>
                   <div className="flex items-center gap-2">
                     {product.colors.map((c) => (
@@ -227,12 +266,13 @@ export const ProductDetailsPage: React.FC = () => {
                         key={c.name}
                         onClick={() => setSelectedColor(c.name)}
                         title={c.name}
-                        className={`w-7 h-7 rounded-full border transition-all ${
+                        className={`w-7 h-7 rounded-full border transition-all cursor-pointer ${
                           selectedColor === c.name
                             ? 'ring-2 ring-[#171717] border-white scale-105'
                             : 'border-[#E7E5E4] hover:scale-105'
                         }`}
                         style={{ backgroundColor: c.hex }}
+                        aria-label={`Select color ${c.name}`}
                       />
                     ))}
                   </div>
@@ -243,8 +283,8 @@ export const ProductDetailsPage: React.FC = () => {
               {product.sizes && product.sizes.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#171717]">
-                      Size: <span className="font-semibold text-[#737373]">{selectedSize}</span>
+                    <label className="text-xs font-semibold uppercase tracking-wider text-[#171717]">
+                      Size: <span className="font-normal text-[#737373]">{selectedSize}</span>
                     </label>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -252,11 +292,12 @@ export const ProductDetailsPage: React.FC = () => {
                       <button
                         key={s}
                         onClick={() => setSelectedSize(s)}
-                        className={`min-w-12 py-2 px-3 text-xs font-semibold rounded-lg border transition-all ${
+                        className={`min-w-12 py-2 px-3 text-xs font-medium rounded-lg border transition-all cursor-pointer ${
                           selectedSize === s
                             ? 'bg-[#171717] text-white border-[#171717]'
                             : 'bg-white text-[#171717] border-[#E7E5E4] hover:border-[#171717]'
                         }`}
+                        aria-label={`Select size ${s}`}
                       >
                         {s}
                       </button>
@@ -271,54 +312,65 @@ export const ProductDetailsPage: React.FC = () => {
                   <div className="flex items-center border border-[#E7E5E4] rounded-lg bg-[#FAF9F6] p-1">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-8 h-8 flex items-center justify-center text-[#171717] hover:bg-white rounded text-sm font-bold transition-colors"
+                      disabled={quantity <= 1 || !product.inStock}
+                      className="w-8 h-8 flex items-center justify-center text-[#171717] hover:bg-white rounded text-sm font-semibold transition-colors disabled:opacity-40 cursor-pointer"
+                      aria-label="Decrease quantity"
                     >
                       -
                     </button>
-                    <span className="w-8 text-center text-xs font-bold text-[#171717]">
+                    <span className="w-8 text-center text-xs font-semibold text-[#171717]">
                       {quantity}
                     </span>
                     <button
-                      onClick={() => setQuantity(quantity + 1)}
-                      className="w-8 h-8 flex items-center justify-center text-[#171717] hover:bg-white rounded text-sm font-bold transition-colors"
+                      onClick={() => setQuantity(Math.min(10, quantity + 1))}
+                      disabled={quantity >= 10 || !product.inStock}
+                      className="w-8 h-8 flex items-center justify-center text-[#171717] hover:bg-white rounded text-sm font-semibold transition-colors disabled:opacity-40 cursor-pointer"
+                      aria-label="Increase quantity"
                     >
                       +
                     </button>
                   </div>
 
-                  <button
+                  {/* Wishlist Button */}
+                  <motion.button
+                    whileTap={{ scale: 0.88 }}
                     onClick={() => {
                       toggleWishlist(product);
                       showToast(
-                        isFavorited ? 'Removed from wishlist' : 'Saved to wishlist!',
+                        isFavorited ? 'Removed from wishlist' : 'Saved to wishlist',
                         'info'
                       );
                     }}
-                    className={`p-3 rounded-lg border transition-colors ${
+                    className={`p-3 rounded-lg border transition-colors cursor-pointer ${
                       isFavorited
                         ? 'border-[#171717] bg-white text-rose-600'
                         : 'border-[#E7E5E4] text-[#737373] hover:text-[#171717] hover:border-[#171717]'
                     }`}
                     title="Wishlist"
+                    aria-label={isFavorited ? 'Remove from wishlist' : 'Save to wishlist'}
                   >
-                    <Heart className={`w-4 h-4 ${isFavorited ? 'fill-rose-600' : ''}`} />
-                  </button>
+                    <Heart className={`w-4 h-4 ${isFavorited ? 'fill-rose-600 text-rose-600' : ''}`} />
+                  </motion.button>
 
                   <Button
                     variant="primary"
                     size="lg"
-                    className="flex-1 bg-[#171717] hover:bg-black text-white font-bold rounded-lg"
+                    disabled={!product.inStock}
+                    className={`flex-1 font-medium rounded-lg transition-colors ${
+                      hasAdded ? 'bg-emerald-600 hover:bg-emerald-600' : ''
+                    }`}
                     onClick={handleAddToCart}
-                    leftIcon={<ShoppingBag className="w-4 h-4" />}
+                    leftIcon={hasAdded ? <Check className="w-4 h-4" /> : <ShoppingBag className="w-4 h-4" />}
                   >
-                    Add to Cart
+                    {hasAdded ? 'Added to Cart' : product.inStock ? 'Add to Cart' : 'Out of Stock'}
                   </Button>
                 </div>
 
                 <Button
                   variant="outline"
                   size="lg"
-                  className="w-full font-bold border-[#E7E5E4] hover:border-[#171717] rounded-lg"
+                  disabled={!product.inStock}
+                  className="w-full font-medium border-[#E7E5E4] hover:border-[#171717] rounded-lg"
                   onClick={handleBuyNow}
                 >
                   Buy Now
@@ -328,20 +380,20 @@ export const ProductDetailsPage: React.FC = () => {
               {/* Value Props */}
               <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[#E7E5E4] text-center">
                 <div className="p-3 rounded-lg bg-[#FAF9F6] border border-[#E7E5E4]">
-                  <Truck className="w-4 h-4 text-[#171717] mx-auto mb-1" />
-                  <p className="text-[11px] font-bold text-[#171717]">Express Delivery</p>
+                  <Truck className="w-4 h-4 text-[#171717] mx-auto mb-1 stroke-1" />
+                  <p className="text-[11px] font-semibold text-[#171717]">Express Delivery</p>
                   <p className="text-[10px] text-[#737373]">Free over ₹999</p>
                 </div>
 
                 <div className="p-3 rounded-lg bg-[#FAF9F6] border border-[#E7E5E4]">
-                  <ShieldCheck className="w-4 h-4 text-[#171717] mx-auto mb-1" />
-                  <p className="text-[11px] font-bold text-[#171717]">Verified Genuine</p>
+                  <ShieldCheck className="w-4 h-4 text-[#171717] mx-auto mb-1 stroke-1" />
+                  <p className="text-[11px] font-semibold text-[#171717]">Verified Genuine</p>
                   <p className="text-[10px] text-[#737373]">Authentic guarantee</p>
                 </div>
 
                 <div className="p-3 rounded-lg bg-[#FAF9F6] border border-[#E7E5E4]">
-                  <RotateCcw className="w-4 h-4 text-[#171717] mx-auto mb-1" />
-                  <p className="text-[11px] font-bold text-[#171717]">7-Day Returns</p>
+                  <RotateCcw className="w-4 h-4 text-[#171717] mx-auto mb-1 stroke-1" />
+                  <p className="text-[11px] font-semibold text-[#171717]">7-Day Returns</p>
                   <p className="text-[10px] text-[#737373]">Simple pickup</p>
                 </div>
               </div>
@@ -351,7 +403,7 @@ export const ProductDetailsPage: React.FC = () => {
           {/* Product Specifications Table */}
           {product.features && product.features.length > 0 && (
             <div className="mt-12 pt-8 border-t border-[#E7E5E4]">
-              <h3 className="text-base font-bold text-[#171717] mb-4">
+              <h3 className="text-base font-semibold text-[#171717] mb-4">
                 Specifications & Highlights
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -377,7 +429,7 @@ export const ProductDetailsPage: React.FC = () => {
                 <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">
                   COMPLEMENTARY PIECES
                 </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-[#171717] mt-1">
+                <h3 className="text-xl sm:text-2xl font-medium text-[#171717] mt-1 tracking-tight">
                   You May Also Like
                 </h3>
               </div>

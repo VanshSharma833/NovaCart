@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
+import { PRODUCT_FALLBACK_IMAGE } from '../../lib/helpers';
 
 interface CategoryItem {
   id: string;
@@ -73,7 +75,7 @@ export const CategorySlider: React.FC = () => {
             <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">
               DEPARTMENTS
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#171717] tracking-tight mt-1">
+            <h2 className="text-2xl sm:text-3xl font-medium text-[#171717] tracking-tight mt-1">
               Shop by Category
             </h2>
           </div>
@@ -82,39 +84,47 @@ export const CategorySlider: React.FC = () => {
             to="/shop"
             className="text-xs sm:text-sm font-semibold text-[#171717] hover:text-[#6554D9] flex items-center gap-1 transition-colors"
           >
-            <span>View All Departments</span>
+            <span>View All</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
         {/* 6 Category Cards Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-6">
           {sixCategories.map((cat) => (
-            <Link
+            <motion.div
               key={cat.id}
-              to={`/shop?category=${cat.slug}`}
-              className="group bg-white rounded-xl border border-[#E7E5E4] hover:border-[#171717] p-3 flex flex-col transition-all duration-300"
+              whileHover={{ y: -3 }}
+              transition={{ duration: 0.2 }}
             >
-              {/* Product-First Photography Frame */}
-              <div className="aspect-square w-full rounded-lg overflow-hidden bg-[#FAF9F6] mb-3">
-                <img
-                  src={cat.image}
-                  alt={cat.name}
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500"
-                />
-              </div>
+              <Link
+                to={`/shop?category=${cat.slug}`}
+                className="group bg-white rounded-xl border border-[#E7E5E4] hover:border-[#171717] p-3 flex flex-col h-full transition-colors shadow-2xs block"
+              >
+                {/* Product-First Photography Frame */}
+                <div className="aspect-square w-full rounded-lg overflow-hidden bg-[#FAF9F6] mb-3">
+                  <img
+                    src={cat.image}
+                    alt={cat.name}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
+                    }}
+                    className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500"
+                  />
+                </div>
 
-              {/* Title & Item Count */}
-              <div className="mt-auto">
-                <h3 className="text-sm font-bold text-[#171717] group-hover:text-black transition-colors">
-                  {cat.name}
-                </h3>
-                <p className="text-[11px] text-[#737373] mt-0.5">
-                  {cat.subtext}
-                </p>
-              </div>
-            </Link>
+                {/* Title & Item Count */}
+                <div className="mt-auto">
+                  <h3 className="text-xs sm:text-sm font-medium text-[#171717] group-hover:text-black transition-colors">
+                    {cat.name}
+                  </h3>
+                  <p className="text-[11px] text-[#737373] mt-0.5">
+                    {cat.subtext}
+                  </p>
+                </div>
+              </Link>
+            </motion.div>
           ))}
         </div>
       </div>

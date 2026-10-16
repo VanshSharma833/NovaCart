@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { ToastProvider } from './context/ToastContext';
@@ -33,18 +34,25 @@ const AppContent: React.FC = () => {
       <AnnouncementBar onOpenContact={handleOpenContact} />
       <Navbar onOpenContact={handleOpenContact} />
 
-      {/* Main Content Route Views */}
+      {/* Main Content Route Views with subtle Page Transition */}
       <main className="flex-1 w-full" key={location.pathname}>
-        <Routes>
-          <Route path="/" element={<HomePage onOpenContact={handleOpenContact} />} />
-          <Route path="/shop" element={<ShopPage />} />
-          <Route path="/product/:id" element={<ProductDetailsPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/wishlist" element={<WishlistPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/account" element={<AccountPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.22, ease: 'easeOut' }}
+          className="w-full h-full"
+        >
+          <Routes>
+            <Route path="/" element={<HomePage onOpenContact={handleOpenContact} />} />
+            <Route path="/shop" element={<ShopPage />} />
+            <Route path="/product/:id" element={<ProductDetailsPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/account" element={<AccountPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </motion.div>
       </main>
 
       <Footer onOpenContact={handleOpenContact} />

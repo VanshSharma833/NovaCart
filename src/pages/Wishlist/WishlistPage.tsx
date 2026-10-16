@@ -7,6 +7,7 @@ import { useToast } from '../../context/ToastContext';
 import { formatPrice } from '../../lib/formatPrice';
 import { Button } from '../../components/ui/Button';
 import { RatingStars } from '../../components/ui/RatingStars';
+import { PRODUCT_FALLBACK_IMAGE } from '../../lib/helpers';
 
 export const WishlistPage: React.FC = () => {
   const { wishlistProducts, removeFromWishlist, clearWishlist, wishlistCount } = useWishlist();
@@ -81,6 +82,9 @@ export const WishlistPage: React.FC = () => {
                     <img
                       src={product.image}
                       alt={product.name}
+                      onError={(e) => {
+                        e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
+                      }}
                       className="w-full h-full object-contain mix-blend-multiply"
                     />
                   </Link>

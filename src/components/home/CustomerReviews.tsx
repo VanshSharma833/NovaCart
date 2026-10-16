@@ -8,13 +8,13 @@ export const CustomerReviews: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-xl mx-auto mb-12">
           <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">
-            VERIFIED EXPERIENCES
+            COMMUNITY FEEDBACK
           </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#171717] tracking-tight mt-1">
-            Loved by 180,000+ Shoppers
+          <h2 className="text-2xl sm:text-3xl font-medium text-[#171717] tracking-tight mt-1">
+            What Our Shoppers Say
           </h2>
           <p className="text-xs sm:text-sm text-[#737373] mt-2">
-            Real feedback from verified purchasers worldwide
+            Curated reviews and feedback from our demonstration cohort
           </p>
         </div>
 
@@ -32,8 +32,8 @@ export const CustomerReviews: React.FC = () => {
                   ))}
                 </div>
 
-                <h4 className="text-sm font-bold text-[#171717] mb-1.5">
-                  "{rev.title}"
+                <h4 className="text-sm font-semibold text-[#171717] mb-1.5">
+                  &quot;{rev.title}&quot;
                 </h4>
 
                 <p className="text-xs text-[#737373] leading-relaxed">
@@ -49,7 +49,7 @@ export const CustomerReviews: React.FC = () => {
                     className="w-8 h-8 rounded-full object-cover border border-[#E7E5E4]"
                   />
                   <div>
-                    <h5 className="text-xs font-bold text-[#171717]">{rev.author}</h5>
+                    <h5 className="text-xs font-medium text-[#171717]">{rev.author}</h5>
                     <p className="text-[10px] text-[#737373]">{rev.date}</p>
                   </div>
                 </div>
@@ -57,7 +57,7 @@ export const CustomerReviews: React.FC = () => {
                 {rev.verified && (
                   <span className="flex items-center gap-1 text-[10px] font-medium text-[#171717] bg-white border border-[#E7E5E4] px-2 py-0.5 rounded">
                     <ShieldCheck className="w-3 h-3 text-[#6554D9]" />
-                    <span>Verified</span>
+                    <span>Demo Verified</span>
                   </span>
                 )}
               </div>

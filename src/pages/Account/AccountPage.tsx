@@ -12,6 +12,7 @@ import {
 import { formatPrice } from '../../lib/formatPrice';
 import { useWishlist } from '../../context/WishlistContext';
 import { Button } from '../../components/ui/Button';
+import { PRODUCT_FALLBACK_IMAGE } from '../../lib/helpers';
 
 export const AccountPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'orders' | 'profile' | 'addresses' | 'payments'>('orders');
@@ -215,7 +216,14 @@ export const AccountPage: React.FC = () => {
                         {order.items.map((item, idx) => (
                           <div key={idx} className="flex items-center gap-3.5">
                             <div className="w-14 h-14 rounded-lg bg-[#FAF9F6] border border-[#E7E5E4] p-1 shrink-0 overflow-hidden flex items-center justify-center">
-                              <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                onError={(e) => {
+                                  e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
+                                }}
+                                className="w-full h-full object-contain"
+                              />
                             </div>
                             <div className="flex-1 min-w-0">
                               <h4 className="text-xs font-medium text-[#171717] truncate">{item.name}</h4>

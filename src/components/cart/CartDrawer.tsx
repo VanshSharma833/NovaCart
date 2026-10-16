@@ -5,6 +5,7 @@ import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { formatPrice } from '../../lib/formatPrice';
 import { Button } from '../ui/Button';
+import { PRODUCT_FALLBACK_IMAGE } from '../../lib/helpers';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -105,6 +106,9 @@ export const CartDrawer: React.FC = () => {
                         <img
                           src={item.product.image}
                           alt={item.product.name}
+                          onError={(e) => {
+                            e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
+                          }}
                           className="w-full h-full object-contain mix-blend-multiply"
                         />
                       </Link>
