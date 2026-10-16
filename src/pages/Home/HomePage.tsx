@@ -7,7 +7,6 @@ import { PromoBanner } from '../../components/home/PromoBanner';
 import { BestSellers } from '../../components/home/BestSellers';
 import { EditorialSection } from '../../components/home/EditorialSection';
 import { JustDropped } from '../../components/home/JustDropped';
-import { CustomerReviews } from '../../components/home/CustomerReviews';
 
 interface HomePageProps {
   onOpenContact?: () => void;
@@ -24,7 +23,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenContact }) => {
       <BestSellers />
       <EditorialSection />
       <JustDropped />
-      <CustomerReviews />
     </div>
   );
 };

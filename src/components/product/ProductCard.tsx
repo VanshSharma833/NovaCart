@@ -265,9 +265,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
             <div className="mt-1.5 flex items-center gap-1.5 text-[11px] h-4">
               <Star className="w-3 h-3 fill-amber-400 text-amber-400 shrink-0" />
               <span className="font-bold text-white">{product.rating.toFixed(1)}</span>
-              <span className="text-slate-400">
-                ({product.reviewCount >= 1000 ? `${(product.reviewCount / 1000).toFixed(1)}k` : product.reviewCount})
-              </span>
             </div>
 
             {/* Color Swatch Dots */}
